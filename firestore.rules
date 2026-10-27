@@ -1,0 +1,69 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.enabled == true;
+    }
+
+    function validResponse(data) {
+      return data.keys().hasOnly([
+          'stage',
+          'outcome',
+          'recommendations',
+          'song',
+          'openAnswer',
+          'createdAt'
+        ])
+        && data.keys().hasAll([
+          'stage',
+          'outcome',
+          'recommendations',
+          'song',
+          'openAnswer',
+          'createdAt'
+        ])
+        && data.stage in ['Infantil', 'Primària', 'ESO', 'Altres']
+        && data.outcome in ['Molt bé', 'Bé', 'Regular', 'Ens ha costat']
+        && data.song in [
+          'Shut Up and Dance',
+          'Happy',
+          'Only Human',
+          "Don't Start Now",
+          "CAN'T STOP THE FEELING!",
+          'Blinding Lights',
+          'My Way',
+          'Sucker'
+        ]
+        && data.recommendations is list
+        && data.recommendations.size() >= 1
+        && data.recommendations.size() <= 6
+        && data.recommendations.hasOnly([
+          'Fer una prova tècnica abans de començar',
+          'Començar amb una cançó o nivell fàcil',
+          'Projectar la pantalla ben gran i visible',
+          'Organitzar torns i grups petits',
+          'Adaptar els passos a les necessitats del grup',
+          'Fer una demostració abans de jugar'
+        ])
+        && data.recommendations.toSet().size() == data.recommendations.size()
+        && data.openAnswer is string
+        && data.openAnswer.size() <= 1000
+        && data.createdAt == request.time;
+    }
+
+    match /communityResponses/{responseId} {
+      allow read: if true;
+      allow create: if validResponse(request.resource.data);
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{userId} {
+      allow get: if request.auth != null && request.auth.uid == userId;
+      allow list, create, update, delete: if false;
+    }
+  }
+}

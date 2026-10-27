@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/main.js" defer></script>
+    <script type="module" src="js/main.js"></script>
 </head>
 <body>
     <a class="skip-link" href="#contingut">Ves al contingut</a>
@@ -183,7 +183,7 @@
                 <div class="community-lab-heading">
                     <p class="eyebrow">EXPERIÈNCIES COMPARTIDES</p>
                     <h2 id="community-lab-title">El vostre gimnàs també és un escenari</h2>
-                        <p>Comparteix com ha anat la sessió, les recomanacions i la cançó preferida. Les respostes obertes es revisen abans de publicar-se al mural.</p>
+                        <p>Comparteix com ha anat la sessió, les recomanacions i la cançó preferida. Les respostes es publiquen directament al mural i als resultats de la comunitat.</p>
                 </div>
                 <div class="inspiration-grid">
                     <article class="inspiration-card">
@@ -206,12 +206,10 @@
                     <div class="share-copy">
                             <p class="eyebrow">ENQUESTA DE CENTRE</p>
                         <h3>Comparteix una experiència</h3>
-                            <p>Envia'ns les respostes per correu. Un cop revisades, les dades tancades s'afegiran als resultats i la proposta oberta al mural públic.</p>
+                            <p>Envia la teva experiència i s'afegirà directament al mural públic i als resultats de la comunitat.</p>
                             <p class="share-privacy">No incloguis dades personals ni informació que permeti identificar l'alumnat. El nom del centre no es mostrarà públicament.</p>
                     </div>
                     <form id="experience-form" class="experience-form">
-                        <label for="experience-center">Centre educatiu</label>
-                        <input id="experience-center" name="center" type="text" maxlength="100" placeholder="Nom del centre" required>
                         <label for="experience-stage">Etapa educativa</label>
                         <select id="experience-stage" name="stage" required>
                                 <option value="Infantil">Infantil</option>
@@ -252,9 +250,9 @@
                             <textarea id="experience-story" name="story" rows="4" maxlength="1000" placeholder="Comparteix una idea per millorar o ampliar l'activitat..."></textarea>
                             <label class="consent-option">
                                 <input name="publishConsent" type="checkbox" required>
-                                <span>Autoritzo l'ús de les respostes tancades en resultats agregats i la publicació de la resposta oberta després de revisar-la. El nom del centre no es publicarà.</span>
+                                <span>Entenc que les respostes s'afegiran al mural públic. No hi inclouré dades personals.</span>
                             </label>
-                            <button class="button button-primary" type="submit">Preparar el correu <span aria-hidden="true">→</span></button>
+                            <button class="button button-primary" type="submit">Publica la resposta <span aria-hidden="true">→</span></button>
                             <p id="experience-feedback" class="form-feedback" aria-live="polite"></p>
                         </form>
                     </div>
@@ -267,7 +265,7 @@
                         <div id="community-stats" class="community-stats" aria-live="polite"></div>
                         <div class="community-wall-heading">
                             <h3>Idees per fer créixer el projecte</h3>
-                            <p>Respostes obertes revisades per l'equip, sense dades personals de l'alumnat ni del centre. Les aportacions s'actualitzen quan publiquem el fitxer de dades del projecte.</p>
+                            <p>Respostes obertes enviades directament per la comunitat. No hi incloguis dades personals.</p>
                         </div>
                         <div id="community-wall" class="community-wall" aria-live="polite"></div>
                     </section>
@@ -276,89 +274,32 @@
 
         <section id="gestio" class="tab-panel" role="tabpanel" aria-labelledby="nav-gestio" tabindex="0" hidden>
             <div class="section-heading">
-                <p class="eyebrow">EINA LOCAL DE GESTIÓ</p>
-                <h1>Gestiona el mural</h1>
-                <p>Obre el fitxer JSON, edita o esborra aportacions i desa els canvis des del navegador.</p>
+                <p class="eyebrow">GESTIÓ DEL MURAL</p>
+                <h1 id="admin-title">Gestiona el mural</h1>
+                <p>Consulta les aportacions publicades i elimina les que calgui. Només els comptes autoritzats a Firebase poden gestionar-les.</p>
             </div>
             <section class="admin-panel" aria-labelledby="admin-title">
-                <div class="admin-warning">
-                    <strong>Important:</strong> aquesta web és estàtica. La contrasenya només bloqueja aquesta interfície en aquest navegador; no és una protecció real. Les dades del mural són públiques i els canvis només es publiquen quan puges el fitxer JSON actualitzat al repositori.
-                </div>
-                <form id="admin-setup-form" class="admin-login-form" hidden>
-                    <h2 id="admin-title">Configura la contrasenya local</h2>
-                    <label for="admin-new-password">Contrasenya nova</label>
-                    <input id="admin-new-password" name="password" type="password" autocomplete="new-password" minlength="1" required>
-                    <label for="admin-confirm-password">Confirma la contrasenya</label>
-                    <input id="admin-confirm-password" name="confirmation" type="password" autocomplete="new-password" required>
-                    <button class="button button-primary" type="submit">Desa la contrasenya</button>
-                    <p class="form-feedback">A la primera configuració, escriu DanceTGN als dos camps per activar el bloqueig local.</p>
-                </form>
                 <form id="admin-login-form" class="admin-login-form" hidden>
                     <h2>Accés a la gestió</h2>
-                    <label for="admin-password">Contrasenya</label>
+                    <label for="admin-email">Correu electrònic</label>
+                    <input id="admin-email" name="email" type="email" autocomplete="username" required>
+                    <label for="admin-password">Contrasenya de Firebase</label>
                     <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
                     <button class="button button-primary" type="submit">Accedeix</button>
+                    <p id="admin-login-status" class="form-feedback" aria-live="polite">L'administració requereix un compte creat a Firebase i autoritzat a les regles de la base de dades.</p>
                 </form>
                 <div id="admin-workspace" hidden>
                     <div class="admin-toolbar">
                         <p id="admin-status" class="form-feedback" aria-live="polite"></p>
                         <div class="admin-toolbar-actions">
-                            <button id="admin-open-file" class="button button-outline" type="button">Obre community-responses.json</button>
-                            <input id="admin-file-input" class="visually-hidden" type="file" accept=".json,application/json">
-                            <button id="admin-save-file" class="button button-primary" type="button">Desa el fitxer JSON</button>
-                            <button id="admin-lock" class="button button-outline" type="button">Tanca la gestió</button>
+                            <button id="admin-lock" class="button button-outline" type="button">Tanca la sessió</button>
                         </div>
                     </div>
-                    <section class="admin-add-section" aria-labelledby="admin-add-title">
-                        <h2 id="admin-add-title">Afegeix una resposta revisada</h2>
-                        <form id="admin-add-form" class="admin-add-form">
-                            <label for="admin-stage">Etapa educativa</label>
-                            <select id="admin-stage" name="stage" required>
-                                <option value="Infantil">Infantil</option>
-                                <option value="Primària" selected>Primària</option>
-                                <option value="ESO">ESO</option>
-                                <option value="Altres">Altres</option>
-                            </select>
-                            <label for="admin-outcome">Com ha anat?</label>
-                            <select id="admin-outcome" name="outcome" required>
-                                <option value="Molt bé">Molt bé, el grup s'hi ha implicat molt</option>
-                                <option value="Bé">Bé, ha funcionat com esperàvem</option>
-                                <option value="Regular">Regular, hem hagut d'adaptar la sessió</option>
-                                <option value="Ens ha costat">Ens ha costat posar-la en marxa</option>
-                            </select>
-                            <fieldset class="survey-fieldset">
-                                <legend>Recomanacions</legend>
-                                <div class="recommendation-options">
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Fer una prova tècnica abans de començar"><span>Fer una prova tècnica abans de començar</span></label>
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Començar amb una cançó o nivell fàcil"><span>Començar amb una cançó o nivell fàcil</span></label>
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Projectar la pantalla ben gran i visible"><span>Projectar la pantalla ben gran i visible</span></label>
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Organitzar torns i grups petits"><span>Organitzar torns i grups petits</span></label>
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Adaptar els passos a les necessitats del grup"><span>Adaptar els passos a les necessitats del grup</span></label>
-                                    <label class="choice-option"><input name="recommendations" type="checkbox" value="Fer una demostració abans de jugar"><span>Fer una demostració abans de jugar</span></label>
-                                </div>
-                            </fieldset>
-                            <label for="admin-song">Cançó preferida</label>
-                            <select id="admin-song" name="song" required>
-                                <option value="Shut Up and Dance">Shut Up and Dance — WALK THE MOON</option>
-                                <option value="Happy">Happy — Pharrell Williams</option>
-                                <option value="Only Human">Only Human — Jonas Brothers</option>
-                                <option value="Don't Start Now">Don't Start Now — Dua Lipa</option>
-                                <option value="CAN'T STOP THE FEELING!">CAN'T STOP THE FEELING! — Justin Timberlake</option>
-                                <option value="Blinding Lights">Blinding Lights — The Weeknd</option>
-                                <option value="My Way">My Way — Calvin Harris</option>
-                                <option value="Sucker">Sucker — Jonas Brothers</option>
-                            </select>
-                            <label for="admin-open-answer">Què canviaríeu o afegiríeu?</label>
-                            <textarea id="admin-open-answer" name="openAnswer" rows="3" maxlength="1000"></textarea>
-                            <button class="button button-outline" type="submit">Afegeix al fitxer de treball</button>
-                        </form>
-                    </section>
                     <section class="admin-responses-section" aria-labelledby="admin-responses-title">
-                        <h2 id="admin-responses-title">Respostes incloses al fitxer</h2>
+                        <h2 id="admin-responses-title">Aportacions publicades</h2>
                         <div id="admin-responses" class="admin-responses"></div>
                     </section>
                 </div>
-                <p id="admin-feedback" class="form-feedback" aria-live="polite"></p>
             </section>
         </section>
 

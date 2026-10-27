@@ -1210,27 +1210,6 @@ p {
     background: var(--panel);
 }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-.admin-warning {
-    margin-bottom: 1.4rem;
-    padding: 1rem 1.1rem;
-    border: 1px solid rgba(255, 225, 90, 0.3);
-    border-radius: 0.65rem;
-    background: rgba(255, 225, 90, 0.06);
-    color: #e9dfb1;
-    font-size: 0.82rem;
-}
-
 .admin-login-form {
     display: grid;
     max-width: 440px;
@@ -1239,7 +1218,6 @@ p {
 }
 
 .admin-login-form h2,
-.admin-add-section h2,
 .admin-responses-section h2 {
     margin: 0 0 0.4rem;
     font-family: var(--font-display);
@@ -1248,8 +1226,7 @@ p {
     letter-spacing: 0;
 }
 
-.admin-login-form label,
-.admin-field {
+.admin-login-form label {
     display: grid;
     min-width: 0;
     gap: 0.35rem;
@@ -1258,12 +1235,7 @@ p {
     font-weight: 600;
 }
 
-.admin-login-form input,
-.admin-field input,
-.admin-field select,
-.admin-field textarea,
-.admin-add-form select,
-.admin-add-form textarea {
+.admin-login-form input {
     width: 100%;
     min-height: 42px;
     padding: 0.65rem 0.75rem;
@@ -1276,12 +1248,7 @@ p {
     font-size: 0.84rem;
 }
 
-.admin-login-form input:focus,
-.admin-field input:focus,
-.admin-field select:focus,
-.admin-field textarea:focus,
-.admin-add-form select:focus,
-.admin-add-form textarea:focus {
+.admin-login-form input:focus {
     border-color: var(--cyan);
     box-shadow: 0 0 0 3px rgba(57, 239, 255, 0.1);
 }
@@ -1293,51 +1260,16 @@ p {
     gap: 1rem;
 }
 
-.admin-toolbar-actions,
-.admin-response-actions {
+.admin-toolbar-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.65rem;
 }
 
-.admin-add-section,
 .admin-responses-section {
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--line);
-}
-
-.admin-add-form,
-.admin-response-form {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-    gap: 0.7rem;
-}
-
-.admin-add-form > label,
-.admin-response-form > .admin-field {
-    display: grid;
-    min-width: 0;
-    gap: 0.35rem;
-    color: #e8edf8;
-    font-size: 0.78rem;
-    font-weight: 600;
-}
-
-.admin-add-form > .survey-fieldset,
-.admin-add-form > textarea,
-.admin-add-form > button,
-.admin-response-form > .admin-recommendations,
-.admin-response-form > .admin-answer-field,
-.admin-response-actions {
-    grid-column: 1 / -1;
-}
-
-.admin-response-form > .admin-answer-field textarea,
-.admin-add-form > textarea {
-    min-height: 90px;
-    resize: vertical;
 }
 
 .admin-responses {
@@ -1363,35 +1295,17 @@ p {
     letter-spacing: 0;
 }
 
-.admin-recommendations {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-    margin: 0.65rem 0;
-    padding: 0.8rem;
-    border: 1px solid var(--line);
-    border-radius: 0.55rem;
-}
-
-.admin-recommendations legend {
-    padding: 0 0.35rem;
-    color: #e8edf8;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.admin-recommendations label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+.admin-response-summary,
+.admin-response-answer {
+    margin-bottom: 0.75rem;
     color: var(--muted);
-    font-size: 0.73rem;
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
 }
 
-.admin-recommendations input {
-    flex: 0 0 auto;
-    margin: 0.15rem 0 0;
-    accent-color: var(--cyan);
+.admin-response-answer {
+    color: #e1e6f2;
+    white-space: pre-wrap;
 }
 
 .admin-delete {
@@ -1680,12 +1594,6 @@ p {
     }
 
     .recommendation-options {
-        grid-template-columns: 1fr;
-    }
-
-    .admin-add-form,
-    .admin-response-form,
-    .admin-recommendations {
         grid-template-columns: 1fr;
     }
 

@@ -1,24 +1,35 @@
 # Dance Revolution EF · Mentoria 4.0 Tarragonès
 
-Web estàtica per presentar Dance Revolution EF, jugar a Scratch i consultar recursos didàctics. La pàgina es publica amb GitHub Pages; no utilitza backend ni transmet respostes automàticament.
+Web estàtica per presentar Dance Revolution EF, jugar a Scratch i consultar recursos didàctics. Es publica amb GitHub Pages i desa les experiències de la comunitat a Cloud Firestore.
 
 ## Estructura
 
-- `index.html`: contingut i navegació accessible.
+- `index.html`: contingut, navegació, enquesta, mural i gestió.
 - `css/styles.css`: disseny adaptable i estètica arcade.
-- `js/main.js`: navegació, formulari i representació del mural.
-- `community-responses.json`: respostes revisades que s'exposen públicament al mural.
+- `js/main.js`: navegació, enquesta, resultats i administració.
+- `js/firebase-client.js`: inicialització del client Firebase amb la configuració web del projecte.
+- `firestore.rules`: regles per validar les aportacions i limitar l'esborrat als administradors.
 - `fotos/`: logos de Mentories 4.0 i del programa educatiu.
 
-## Com funcionen les aportacions
+## Configurar Firebase
 
-El formulari prepara un correu amb les respostes. La web no les desa ni les envia a un servidor: cal que el centre obri el correu, el revisi i l'enviï. No incloguis dades personals de l'alumnat. El nom del centre només es rep al correu de l'equip i no forma part del fitxer públic.
+La web utilitza **Cloud Firestore** i **Firebase Authentication**. No cal crear cap servidor ni publicar cap clau privada.
 
-Després de revisar la resposta, obre **Gestiona el mural** i introdueix `DanceTGN` als dos camps de la primera configuració. A continuació, fes servir **Obre community-responses.json** per triar el fitxer del repositori. Pots afegir, editar o esborrar les respostes des de la pàgina i prémer **Desa el fitxer JSON** per escriure els canvis directament al fitxer local. El navegador demanarà permís per obrir i desar el fitxer. Si no permet l'escriptura directa, es descarregarà una còpia per substituir manualment.
+1. A [Firebase Console](https://console.firebase.google.com/), crea un projecte i afegeix una aplicació web.
+2. Copia la configuració de l'aplicació web i posa els valors `apiKey`, `authDomain`, `projectId` i `appId` a l'objecte `firebaseConfig` de `js/firebase-client.js`. Aquests valors identifiquen l'aplicació web; no hi posis mai una clau de compte de servei ni una clau privada.
+3. A **Build → Firestore Database**, crea una base de dades Cloud Firestore. Tria una ubicació propera als usuaris.
+4. A **Build → Authentication → Sign-in method**, activa **Email/Password**.
+5. A **Authentication → Settings → Authorized domains**, afegeix el domini on es publica el lloc a GitHub Pages.
+6. A **Authentication → Users**, crea el compte que faràs servir per administrar les aportacions. No cal habilitar el registre d'usuaris des de la web.
+7. Copia l'UID d'aquest compte. A **Firestore Database → Data**, crea la col·lecció `admins` i un document amb l'UID com a identificador i el camp booleà `enabled` amb valor `true`.
+8. A **Firestore Database → Rules**, substitueix les regles per les del fitxer `firestore.rules` i publica-les. Les regles permeten llegir i enviar aportacions validades, però només un compte amb document d'administrador pot esborrar-les.
+9. Publica el lloc a GitHub Pages. Comprova l'enviament d'una aportació i inicia sessió a la pestanya de gestió amb el correu i la contrasenya del compte administrador de Firebase.
 
-El navegador desa un verificador de contrasenya amb sal a l'emmagatzematge local; la contrasenya no s'inclou al repositori. Aquest bloqueig només és una comoditat local, no una autenticació segura: el lloc i el JSON són públics i l'accés al codi client es pot inspeccionar. La contrasenya tampoc no protegeix el fitxer del repositori.
+Les aportacions es publiquen sense moderació prèvia i són visibles públicament al mural. No s'hi demana el nom del centre: no hi incloguis dades personals ni informació que permeti identificar alumnes. L'administració es protegeix amb Firebase Authentication i les regles de Firestore; una contrasenya escrita al JavaScript públic no seria una protecció segura.
 
-Obre la web mitjançant GitHub Pages o `http://localhost:8000`; l'escriptura directa de fitxers està disponible en navegadors compatibles amb File System Access API, com Chrome o Edge en orígens segurs (HTTPS o localhost). Després de desar el fitxer local del repositori, fes commit i push perquè GitHub Pages publiqui els canvis. A Firefox/Safari o altres navegadors sense aquesta API, la web baixa una còpia JSON per substituir manualment. Qualsevol dada dins del fitxer és pública i no es pot esborrar de còpies, branques o cachés que ja s'hagin fet.
+La configuració web de Firebase forma part del codi del client i no és un secret. No publiquis mai credencials de comptes de servei, claus privades ni contrasenyes. Les regles limiten l'estructura i el contingut de les aportacions, però no inclouen un límit de freqüència per evitar enviaments automatitzats.
+
+El pla Spark de Firebase ofereix quotes gratuïtes, adequades per començar amb un ús petit; no cal activar facturació mentre es mantingui dins dels límits del pla. Consulta els [preus i les quotes actuals](https://firebase.google.com/pricing).
 
 ## Provar la pàgina localment
 
@@ -28,6 +39,6 @@ Des de la carpeta del repositori:
 python -m http.server 8000
 ```
 
-Obre `http://localhost:8000`. El mural llegeix `community-responses.json` de la mateixa carpeta i el navegador no desa dades al dispositiu.
+Obre `http://localhost:8000`. La lectura, l'enviament i la gestió requereixen una configuració vàlida a `js/firebase-client.js` i les regles de Firestore publicades.
 
 GitHub Pages publica automàticament la carpeta del repositori amb `.github/workflows/pages.yml`.
