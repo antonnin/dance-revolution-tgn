@@ -8,7 +8,7 @@
     <title>Dance Revolution EF | Mentoria 4.0 Tarragonès</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/main.js" defer></script>
 </head>
@@ -24,10 +24,10 @@
                 </span>
             </a>
             <nav class="main-nav" role="tablist" aria-label="Navegació principal">
-                <button class="nav-link is-active" id="nav-motivacio" type="button" role="tab" aria-selected="true" aria-controls="motivacio" tabindex="0">Per què ho fem?</button>
-                <button class="nav-link" id="nav-joc-complet" type="button" role="tab" aria-selected="false" aria-controls="joc-complet" tabindex="-1">Joc complet!</button>
-                <button class="nav-link" id="nav-plantilla" type="button" role="tab" aria-selected="false" aria-controls="plantilla" tabindex="-1">Plantilla personalitzable</button>
-                <button class="nav-link" id="nav-recursos" type="button" role="tab" aria-selected="false" aria-controls="recursos" tabindex="-1">Recursos didàctics</button>
+                <button class="nav-link is-active" id="nav-motivacio" type="button" role="tab" aria-selected="true" aria-controls="motivacio" tabindex="0">Comença aquí</button>
+                <button class="nav-link" id="nav-joc-complet" type="button" role="tab" aria-selected="false" aria-controls="joc-complet" tabindex="-1">Juga</button>
+                <button class="nav-link" id="nav-plantilla" type="button" role="tab" aria-selected="false" aria-controls="plantilla" tabindex="-1">Crea la teva versió</button>
+                <button class="nav-link" id="nav-recursos" type="button" role="tab" aria-selected="false" aria-controls="recursos" tabindex="-1">Recursos</button>
                 <button class="nav-link" id="nav-comunitat" type="button" role="tab" aria-selected="false" aria-controls="comunitat" tabindex="-1">Comunitat</button>
             </nav>
         </div>
@@ -40,7 +40,10 @@
                 <h1>Ara, el Dance Revolution EF <span>en pantalla gran!</span></h1>
                 <p class="hero-copy">El ritme es viu amb els peus, no mirant a terra. Portem el joc a la pantalla del gimnàs perquè tothom pugui seguir la coreografia, moure's i gaudir del repte.</p>
                 <button class="button button-primary" type="button" data-open-tab="joc-complet">Descobreix el joc <span aria-hidden="true">→</span></button>
-                <div class="hero-signal" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="hero-visual" aria-hidden="true">
+                    <img class="hero-logo" src="fotos/logo_dance_revolution_scratch.png" alt="">
+                    <div class="hero-signal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                </div>
             </div>
 
             <div class="section-heading">
@@ -64,7 +67,7 @@
 
             <div class="cta-strip">
                 <div>
-                    <p class="eyebrow">LLISTOS PER BALLAR?</p>
+                    <p class="eyebrow">LLESTOS PER BALLAR?</p>
                     <h2>Que comenci el repte!</h2>
                 </div>
                 <button class="button button-outline" type="button" data-open-tab="joc-complet">Anar al joc <span aria-hidden="true">→</span></button>
@@ -77,12 +80,26 @@
                 <h1>Joc complet<span>!</span></h1>
                 <p>La versió completa de Dance Revolution EF, amb cançons i nivells per jugar, moure's i ballar. Projecteu-la al gimnàs i prepareu la pista!</p>
             </div>
-            <div class="game-stage">
-                <div class="stage-label"><span class="status-dot"></span> EN DIRECTE · SCRATCH</div>
-                <iframe class="scratch-frame" src="https://scratch.mit.edu/projects/1394540449/embed" title="Joc complet de Dance Revolution EF a Scratch" allowtransparency="true" scrolling="no" allowfullscreen loading="lazy"></iframe>
-            </div>
-            <div class="section-actions">
-                <a class="button button-outline" href="https://scratch.mit.edu/projects/1394540449/" target="_blank" rel="noopener noreferrer">Obrir el joc a Scratch <span aria-hidden="true">↗</span></a>
+            <div class="game-layout">
+                <div class="game-main">
+                    <div class="game-stage">
+                        <div class="stage-label"><span class="status-dot"></span> EN DIRECTE · SCRATCH</div>
+                        <iframe class="scratch-frame" src="https://scratch.mit.edu/projects/1394540449/embed" title="Joc complet de Dance Revolution EF a Scratch" allowtransparency="true" scrolling="no" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="section-actions">
+                        <a class="button button-outline" href="https://scratch.mit.edu/projects/1394540449/" target="_blank" rel="noopener noreferrer">Obrir el joc a Scratch <span aria-hidden="true">↗</span></a>
+                    </div>
+                </div>
+                <aside class="projection-guide" aria-labelledby="projection-title">
+                    <p class="eyebrow">PREPARA LA SESSIÓ</p>
+                    <h2 id="projection-title">Projecta i juga</h2>
+                    <ol class="projection-steps">
+                        <li><span>1</span><div><strong>Connecta el projector</strong><p>Tria duplicar o ampliar pantalla des de l'ordinador.</p></div></li>
+                        <li><span>2</span><div><strong>Posa el joc a pantalla completa</strong><p>Prem la icona de pantalla completa dins del reproductor.</p></div></li>
+                        <li><span>3</span><div><strong>Prepara la pista</strong><p>Connecta la Makey Makey i comprova les fletxes abans de començar.</p></div></li>
+                    </ol>
+                    <p class="projection-tip">Consell: comprova el so i la visibilitat des del fons del gimnàs.</p>
+                </aside>
             </div>
         </section>
 
@@ -116,20 +133,18 @@
                 <article class="document-card">
                     <div class="document-heading">
                         <span class="document-tag">PRIMÀRIA</span>
-                        <a class="text-link" href="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
+                        <a class="button button-outline resource-open" href="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
                     </div>
-                    <h2>Proposta didàctica per a Primària</h2>
+                    <h2>Proposta didàctica</h2>
                     <iframe class="document-frame" src="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/preview" title="Proposta didàctica Dance Revolution EF per a Primària" loading="lazy" allow="autoplay"></iframe>
-                    <p class="embed-note">Si Drive et demana accés, comprova que el fitxer estigui compartit amb «Qualsevol persona amb l'enllaç».</p>
                 </article>
                 <article class="document-card">
                     <div class="document-heading">
                         <span class="document-tag tag-magenta">ESO</span>
-                        <a class="text-link" href="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
+                        <a class="button button-outline resource-open" href="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
                     </div>
-                    <h2>Proposta didàctica per a l'ESO</h2>
+                    <h2>Proposta didàctica</h2>
                     <iframe class="document-frame" src="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/preview" title="Proposta didàctica Dance Revolution EF per a l'ESO" loading="lazy" allow="autoplay"></iframe>
-                    <p class="embed-note">Si Drive et demana accés, comprova que el fitxer estigui compartit amb «Qualsevol persona amb l'enllaç».</p>
                 </article>
             </div>
             <article class="original-resource">
@@ -163,6 +178,57 @@
                     <a class="text-link" href="mailto:anin1@xtec.cat">Parlem del projecte <span aria-hidden="true">→</span></a>
                 </article>
             </div>
+            <section class="community-lab" aria-labelledby="community-lab-title">
+                <div class="community-lab-heading">
+                    <p class="eyebrow">MUR D'IDEES · EN CONSTRUCCIÓ</p>
+                    <h2 id="community-lab-title">El vostre gimnàs també és un escenari</h2>
+                    <p>Les millors idees neixen quan els centres comparteixen què els ha funcionat. Inspira't en aquests reptes i envia'ns la teva experiència perquè la puguem afegir al mur.</p>
+                </div>
+                <div class="inspiration-grid">
+                    <article class="inspiration-card">
+                        <span class="inspiration-index">01 / MÚSICA</span>
+                        <h3>Quina cançó posa tothom en marxa?</h3>
+                        <p>Comparteix una playlist, el ritme que heu triat o una adaptació per a diferents nivells.</p>
+                    </article>
+                    <article class="inspiration-card">
+                        <span class="inspiration-index">02 / PISTA</span>
+                        <h3>Com heu muntat la pista de ball?</h3>
+                        <p>Explica els materials, l'espai i els trucs que us han ajudat a preparar la sessió.</p>
+                    </article>
+                    <article class="inspiration-card">
+                        <span class="inspiration-index">03 / AULA</span>
+                        <h3>Quin repte cooperatiu us ha sorprès?</h3>
+                        <p>Una regla nova, una coreografia pròpia o una adaptació que hagi fet ballar tothom.</p>
+                    </article>
+                </div>
+                <div class="share-experience">
+                    <div class="share-copy">
+                        <p class="eyebrow">TORN OBERT</p>
+                        <h3>Comparteix una experiència</h3>
+                        <p>Envia'ns la idea amb el nom del centre i l'etapa. La revisarem abans de publicar-la al mur perquè inspiri altres escoles.</p>
+                        <p class="share-privacy">No incloguis dades personals de l'alumnat ni imatges identificables sense autorització.</p>
+                    </div>
+                    <form id="experience-form" class="experience-form">
+                        <label for="experience-center">Centre educatiu</label>
+                        <input id="experience-center" name="center" type="text" maxlength="100" placeholder="Nom del centre" required>
+                        <label for="experience-stage">Etapa educativa</label>
+                        <select id="experience-stage" name="stage" required>
+                            <option value="" selected disabled>Tria una etapa</option>
+                            <option>Primària</option>
+                            <option>ESO</option>
+                            <option>Altres ensenyaments</option>
+                        </select>
+                        <label for="experience-story">Què heu fet i què recomaneu?</label>
+                        <textarea id="experience-story" name="story" rows="4" maxlength="1200" placeholder="Explica'ns la música, la pista o el repte cooperatiu..." required></textarea>
+                        <label class="consent-option">
+                            <input name="publishConsent" type="checkbox" required>
+                            <span>Autoritzo l'equip a revisar i publicar aquesta experiència, sense dades personals de l'alumnat.</span>
+                        </label>
+                        <button class="button button-primary" type="submit">Preparar el missatge <span aria-hidden="true">→</span></button>
+                        <p id="experience-feedback" class="form-feedback" aria-live="polite"></p>
+                    </form>
+                </div>
+            </section>
         </section>
     </main>
 
@@ -173,19 +239,21 @@
                     <p class="eyebrow">CONTACTE</p>
                     <h2>Mentoria 4.0 Tarragonès</h2>
                     <div class="contact-links">
-                        <a href="mailto:dparedes@xtec.cat">David Paredes <span>dparedes@xtec.cat</span></a>
-                        <a href="mailto:anin1@xtec.cat">Anton Nin <span>anin1@xtec.cat</span></a>
+                        <a href="https://x.com/WARHOLSPORT" target="_blank" rel="noopener noreferrer">David Paredes <span>dparedes@xtec.cat</span></a>
+                        <a href="https://github.com/antonnin/" target="_blank" rel="noopener noreferrer">Anton Nin <span>anin1@xtec.cat</span></a>
                     </div>
                 </div>
-                <img class="funding-logo" src="fotos/logo_4_0.png" alt="Programa finançat pel Ministeri d'Educació, Formació Professional i Esports, amb el suport de la Generalitat de Catalunya">
             </div>
             <div class="legal-note">
-                <p>Dance Revolution EF Scratch és una aplicació desenvolupada per Anton Nin i David Paredes, mentors 4.0 al CRP Tarragonès, amb l'ajuda d'IA. S'inspira en la proposta original de Vicenç Rodríguez Jiménez-Bravo i es distribueix amb llicència CC BY-NC-SA 4.0. Podeu copiar, distribuir i adaptar l'obra si en reconeixeu l'autoria, no en feu un ús comercial i distribuïu les obres derivades amb la mateixa llicència.</p>
-                <span class="license-mark" aria-label="Llicència Creative Commons Reconeixement, NoComercial, CompartirIgual">CC&nbsp; BY&nbsp; NC&nbsp; SA</span>
+                <p>Dance Revolution EF Scratch és una aplicació desenvolupada per <a href="https://x.com/WARHOLSPORT" target="_blank" rel="noopener noreferrer">David Paredes</a> i <a href="https://github.com/antonnin/" target="_blank" rel="noopener noreferrer">Anton Nin</a>, mentors 4.0 al CRP Tarragonès, amb l'ajuda d'IA. S'inspira en la proposta original de Vicenç Rodríguez Jiménez-Bravo i es distribueix amb la llicència Creative Commons indicada al final d'aquesta pàgina. Podeu copiar, distribuir i adaptar l'obra si en reconeixeu l'autoria, no en feu un ús comercial i distribuïu les obres derivades amb la mateixa llicència.</p>
             </div>
             <div class="mentor-brand">
                 <img src="fotos/logo_mentoria_4_0_arcade.jpg" alt="Logotip arcade de Mentories 4.0">
                 <span class="mentor-tagline">SEGUEIX EL RITME · COORDINA'T · SUPERA EL REPTE</span>
+            </div>
+            <div class="footer-partner-logos">
+                <img class="funding-logo" src="fotos/logo_4_0.png" alt="Programa finançat pel Ministeri d'Educació, Formació Professional i Esports, amb el suport de la Generalitat de Catalunya">
+                <img class="license-logo" src="fotos/llicencia_CC.webp" alt="Llicència Creative Commons Reconeixement, NoComercial i CompartirIgual">
             </div>
         </div>
     </footer>

@@ -59,6 +59,37 @@ document.querySelectorAll('[data-open-tab]').forEach((button) => {
     });
 });
 
+const experienceForm = document.querySelector('#experience-form');
+
+experienceForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(experienceForm);
+    const center = String(formData.get('center')).trim();
+    const stage = String(formData.get('stage')).trim();
+    const story = String(formData.get('story')).trim();
+    const publishConsent = formData.get('publishConsent') === 'on';
+    const feedback = document.querySelector('#experience-feedback');
+
+    if (!center || !stage || !story || !publishConsent) {
+        feedback.textContent = 'Completa els camps i autoritza la publicació abans de preparar el missatge.';
+        return;
+    }
+
+    const subject = encodeURIComponent(`Experiència Dance Revolution EF · ${center}`);
+    const body = encodeURIComponent(
+        `Centre: ${center}\nEtapa: ${stage}\n\nExperiència:\n${story}\n\nAutorització per revisar i publicar aquesta experiència: sí.`
+    );
+    const mailLink = document.createElement('a');
+    mailLink.href = `mailto:anin1@xtec.cat,dparedes@xtec.cat?subject=${subject}&body=${body}`;
+    mailLink.textContent = 'Obre el correu per enviar-la';
+
+    feedback.replaceChildren(
+        document.createTextNode('Missatge preparat. L’equip revisarà la proposta abans de publicar-la: '),
+        mailLink
+    );
+});
+
 const requestedTab = window.location.hash.slice(1);
 const initialTab = tabPanels.some((panel) => panel.id === requestedTab) ? requestedTab : 'motivacio';
 openTab(initialTab, false);
