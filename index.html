@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b15">
+    <meta name="description" content="Dance Revolution EF: una proposta de joc, moviment i tecnologia per projectar l'Educació Física a la pantalla gran.">
+    <title>Dance Revolution EF | Mentoria 4.0 Tarragonès</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#contingut">Ves al contingut</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="#motivacio" aria-label="Dance Revolution EF, inici" data-open-tab="motivacio">
+                <span class="brand-mark" aria-hidden="true">DR<span>EF</span></span>
+                <span class="brand-copy">
+                    <span class="brand-title">DANCE REVOLUTION</span>
+                    <span class="brand-subtitle">EDUCACIÓ FÍSICA · TARRAGONÈS</span>
+                </span>
+            </a>
+            <nav class="main-nav" role="tablist" aria-label="Navegació principal">
+                <button class="nav-link is-active" id="nav-motivacio" type="button" role="tab" aria-selected="true" aria-controls="motivacio" tabindex="0">Per què ho fem?</button>
+                <button class="nav-link" id="nav-joc-complet" type="button" role="tab" aria-selected="false" aria-controls="joc-complet" tabindex="-1">Joc complet!</button>
+                <button class="nav-link" id="nav-plantilla" type="button" role="tab" aria-selected="false" aria-controls="plantilla" tabindex="-1">Plantilla personalitzable.</button>
+                <button class="nav-link" id="nav-recursos" type="button" role="tab" aria-selected="false" aria-controls="recursos" tabindex="-1">Recursos didàctics</button>
+                <button class="nav-link" id="nav-comunitat" type="button" role="tab" aria-selected="false" aria-controls="comunitat" tabindex="-1">Comunitat</button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="contingut" class="page-shell">
+        <section id="motivacio" class="tab-panel is-active" role="tabpanel" aria-labelledby="nav-motivacio" tabindex="0">
+            <div class="hero">
+                <p class="eyebrow"><span class="status-dot"></span> EDUCACIÓ FÍSICA · JOC · TECNOLOGIA</p>
+                <h1>Ara, el Dance Revolution EF <span>en pantalla gran!</span></h1>
+                <p class="hero-copy">El ritme es viu amb els peus, no mirant a terra. Portem el joc a la pantalla del gimnàs perquè tothom pugui seguir la coreografia, moure's i gaudir del repte.</p>
+                <button class="button button-primary" type="button" data-open-tab="joc-complet">Descobreix el joc <span aria-hidden="true">→</span></button>
+                <div class="hero-signal" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <div class="section-heading">
+                <p class="eyebrow">MÉS MOVIMENT, MÉS POSSIBILITATS</p>
+                <h2>Un joc que connecta <span>cos i pantalla</span></h2>
+            </div>
+            <div class="feature-grid">
+                <article class="feature-card feature-cyan">
+                    <span class="feature-number">01</span>
+                    <span class="feature-icon" aria-hidden="true">▣</span>
+                    <h3>Gran format</h3>
+                    <p>Projectem la coreografia al gimnàs perquè l'alumnat aixequi la mirada, segueixi els passos en temps real i balli amb llibertat de moviment.</p>
+                </article>
+                <article class="feature-card feature-magenta">
+                    <span class="feature-number">02</span>
+                    <span class="feature-icon" aria-hidden="true">✦</span>
+                    <h3>Pista connectada, feedback immediat</h3>
+                    <p>La tecnologia Makey Makey i una pista conductora permeten que el joc respongui amb punts i so a cada trepitjada. El disseny i la preparació de la pista són tasques de muntatge del centre: l'alumnat es concentra a jugar i ballar, no a fer-ne el feedback.</p>
+                </article>
+            </div>
+
+            <div class="cta-strip">
+                <div>
+                    <p class="eyebrow">LLISTOS PER BALLAR?</p>
+                    <h2>Que comenci el repte!</h2>
+                </div>
+                <button class="button button-outline" type="button" data-open-tab="joc-complet">Anar al joc <span aria-hidden="true">→</span></button>
+            </div>
+        </section>
+
+        <section id="joc-complet" class="tab-panel" role="tabpanel" aria-labelledby="nav-joc-complet" tabindex="0" hidden>
+            <div class="section-heading">
+                <p class="eyebrow">TRIA LA CANÇÓ I SEGUEIX EL RITME</p>
+                <h1>Joc complet<span>!</span></h1>
+                <p>La versió completa de Dance Revolution EF, amb cançons i nivells per jugar, moure's i ballar. Projecteu-la al gimnàs i prepareu la pista!</p>
+            </div>
+            <div class="game-stage">
+                <div class="stage-label"><span class="status-dot"></span> EN DIRECTE · SCRATCH</div>
+                <iframe class="scratch-frame" src="https://scratch.mit.edu/projects/1394540449/embed" title="Joc complet de Dance Revolution EF a Scratch" allowtransparency="true" scrolling="no" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="section-actions">
+                <a class="button button-outline" href="https://scratch.mit.edu/projects/1394540449/" target="_blank" rel="noopener noreferrer">Obrir el joc a Scratch <span aria-hidden="true">↗</span></a>
+            </div>
+        </section>
+
+        <section id="plantilla" class="tab-panel" role="tabpanel" aria-labelledby="nav-plantilla" tabindex="0" hidden>
+            <div class="section-heading">
+                <p class="eyebrow">FES-TE'L TEU</p>
+                <h1>Plantilla <span>personalitzable.</span></h1>
+                <p>Programa una coreografia pròpia, adapta el ritme i crea nous passos amb aquesta plantilla de Scratch i la seva guia de modificació.</p>
+            </div>
+            <div class="template-layout">
+                <div class="template-stage">
+                    <div class="stage-label"><span class="status-dot status-magenta"></span> CREA LA TEVA COREOGRAFIA</div>
+                    <iframe class="scratch-frame" src="https://scratch.mit.edu/projects/1394973231/embed" title="Plantilla personalitzable de Dance Revolution EF a Scratch" allowtransparency="true" scrolling="no" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <article class="guide-card">
+                    <p class="eyebrow">PAS A PAS</p>
+                    <h2>Guia de modificació</h2>
+                    <p>Aprèn a afegir sons, ajustar la velocitat (BPM) i encadenar blocs per crear moviments i seqüències pròpies.</p>
+                    <a class="button button-primary" href="https://drive.google.com/file/d/1ZfD_o2xYR9l3yCQF_sTHia_B25j-pdNc/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir la guia <span aria-hidden="true">↗</span></a>
+                </article>
+            </div>
+        </section>
+
+        <section id="recursos" class="tab-panel" role="tabpanel" aria-labelledby="nav-recursos" tabindex="0" hidden>
+            <div class="section-heading">
+                <p class="eyebrow">DOCUMENTS PER PORTAR-HO A L'AULA</p>
+                <h1>Recursos <span>didàctics</span></h1>
+                <p>Consulta les propostes didàctiques integrades a la pàgina o visita la proposta original de Vicenç Rodríguez Jiménez-Bravo.</p>
+            </div>
+            <div class="resource-grid">
+                <article class="document-card">
+                    <div class="document-heading">
+                        <span class="document-tag">PRIMÀRIA</span>
+                        <a class="text-link" href="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <h2>Proposta didàctica per a Primària</h2>
+                    <iframe class="document-frame" src="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/preview" title="Proposta didàctica Dance Revolution EF per a Primària" loading="lazy" allow="autoplay"></iframe>
+                    <p class="embed-note">Si Drive et demana accés, comprova que el fitxer estigui compartit amb «Qualsevol persona amb l'enllaç».</p>
+                </article>
+                <article class="document-card">
+                    <div class="document-heading">
+                        <span class="document-tag tag-magenta">ESO</span>
+                        <a class="text-link" href="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <h2>Proposta didàctica per a l'ESO</h2>
+                    <iframe class="document-frame" src="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/preview" title="Proposta didàctica Dance Revolution EF per a l'ESO" loading="lazy" allow="autoplay"></iframe>
+                    <p class="embed-note">Si Drive et demana accés, comprova que el fitxer estigui compartit amb «Qualsevol persona amb l'enllaç».</p>
+                </article>
+            </div>
+            <article class="original-resource">
+                <span class="original-icon" aria-hidden="true">↗</span>
+                <div>
+                    <p class="eyebrow">LA PROPOSTA ORIGINAL</p>
+                    <h2>Dance Revolution EF, per Vicenç Rodríguez Jiménez-Bravo</h2>
+                    <p>Consulta la unitat didàctica original a Quatre Clics.</p>
+                </div>
+                <a class="button button-outline" href="https://www.quatreclics.com/ud-6%C3%A8-nivell/ud-dance-revolution-ef" target="_blank" rel="noopener noreferrer">Visitar Quatre Clics <span aria-hidden="true">↗</span></a>
+            </article>
+        </section>
+
+        <section id="comunitat" class="tab-panel" role="tabpanel" aria-labelledby="nav-comunitat" tabindex="0" hidden>
+            <div class="section-heading">
+                <p class="eyebrow">UNA IDEA QUE ES MOU</p>
+                <h1>Comunitat<span>.</span></h1>
+                <p>Una proposta per compartir, adaptar i fer créixer l'aprenentatge actiu a les escoles i instituts.</p>
+            </div>
+            <div class="community-card">
+                <article>
+                    <p class="eyebrow">D'ON VENIM</p>
+                    <h2>Una idea original, moltes maneres de jugar</h2>
+                    <p>Aquesta adaptació digital i tecnològica s'inspira en la proposta de <strong>Vicenç Rodríguez Jiménez-Bravo</strong>, que va portar el joc Dance Dance Revolution a l'aula d'Educació Física amb targetes de colors, seqüències i aprenentatge cooperatiu.</p>
+                    <a class="text-link" href="https://www.quatreclics.com/ud-6%C3%A8-nivell/ud-dance-revolution-ef" target="_blank" rel="noopener noreferrer">Llegir la proposta original <span aria-hidden="true">↗</span></a>
+                </article>
+                <article>
+                    <p class="eyebrow">PER ALS CENTRES</p>
+                    <h2>Moviment i competència digital</h2>
+                    <p>El projecte combina Educació Física, matemàtiques, programació i robòtica amb eines com Makey Makey. Està pensat per als centres del <strong>Tarragonès</strong> i d'arreu que vulguin introduir situacions d'aprenentatge transversals.</p>
+                    <a class="text-link" href="mailto:anin1@xtec.cat">Parlem del projecte <span aria-hidden="true">→</span></a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div>
+                    <p class="eyebrow">CONTACTE</p>
+                    <h2>Mentoria 4.0 Tarragonès</h2>
+                    <div class="contact-links">
+                        <a href="mailto:dparedes@xtec.cat">David Paredes <span>dparedes@xtec.cat</span></a>
+                        <a href="mailto:anin1@xtec.cat">Anton Nin <span>anin1@xtec.cat</span></a>
+                    </div>
+                </div>
+                <img class="funding-logo" src="fotos/logo_4_0.png" alt="Programa finançat pel Ministeri d'Educació, Formació Professional i Esports, amb el suport de la Generalitat de Catalunya">
+            </div>
+            <div class="legal-note">
+                <p>Dance Revolution EF Scratch és una aplicació desenvolupada per Anton Nin i David Paredes, mentors 4.0 al CRP Tarragonès, amb l'ajuda d'IA. S'inspira en la proposta original de Vicenç Rodríguez Jiménez-Bravo i es distribueix amb llicència CC BY-NC-SA 4.0. Podeu copiar, distribuir i adaptar l'obra si en reconeixeu l'autoria, no en feu un ús comercial i distribuïu les obres derivades amb la mateixa llicència.</p>
+                <span class="license-mark" aria-label="Llicència Creative Commons Reconeixement, NoComercial, CompartirIgual">CC&nbsp; BY&nbsp; NC&nbsp; SA</span>
+            </div>
+            <div class="mentor-brand">
+                <span class="mentor-caption">UNA INICIATIVA DE</span>
+                <img src="fotos/logo_mentories_4_0.png" alt="Mentories 4.0">
+                <span class="mentor-tagline">SEGUEIX EL RITME · COORDINA'T · SUPERA EL REPTE</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
