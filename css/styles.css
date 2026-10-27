@@ -963,14 +963,64 @@ p {
     line-height: 1.5;
 }
 
+.experience-form input[type="checkbox"],
 .consent-option input {
     width: 1.05rem;
     min-height: 1.05rem;
     margin: 0.15rem 0 0;
+    padding: 0;
+    border: 0;
     accent-color: var(--cyan);
 }
 
-.experience-form input,
+.survey-fieldset {
+    min-width: 0;
+    margin: 0.65rem 0 0;
+    padding: 0;
+    border: 0;
+}
+
+.survey-fieldset legend {
+    margin-bottom: 0.55rem;
+    color: #e8edf8;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.survey-fieldset legend span,
+.experience-form label > span {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.recommendation-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+}
+
+.recommendation-options .choice-option {
+    display: flex;
+    min-height: 3.2rem;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 0.6rem;
+    background: rgba(7, 10, 18, 0.62);
+    color: #c1c9d8;
+    font-size: 0.76rem;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.recommendation-options input[type="checkbox"] {
+    flex: 0 0 auto;
+    margin: 0.15rem 0 0;
+}
+
+.experience-form input:not([type="checkbox"]),
 .experience-form select,
 .experience-form textarea {
     width: 100%;
@@ -991,12 +1041,12 @@ p {
     resize: vertical;
 }
 
-.experience-form input::placeholder,
+.experience-form input:not([type="checkbox"])::placeholder,
 .experience-form textarea::placeholder {
     color: #7f8aa1;
 }
 
-.experience-form input:focus,
+.experience-form input:not([type="checkbox"]):focus,
 .experience-form select:focus,
 .experience-form textarea:focus {
     border-color: var(--cyan);
@@ -1020,6 +1070,333 @@ p {
     color: var(--cyan);
     font-weight: 700;
     text-underline-offset: 3px;
+}
+
+.community-results {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+}
+
+.community-results .community-lab-heading {
+    margin-bottom: 1.4rem;
+}
+
+.community-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.stat-group {
+    min-width: 0;
+    padding: 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 0.85rem;
+    background: rgba(8, 11, 19, 0.65);
+}
+
+.stat-group h3,
+.community-wall-heading h3 {
+    margin-bottom: 0.85rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.stat-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stat-item {
+    min-width: 0;
+}
+
+.stat-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: #c1c9d8;
+    font-size: 0.77rem;
+}
+
+.stat-label strong {
+    color: var(--cyan);
+}
+
+.stat-track {
+    display: block;
+    height: 0.35rem;
+    margin-top: 0.35rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: rgba(167, 187, 220, 0.12);
+}
+
+.stat-bar {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--cyan), #8a8bff);
+}
+
+.empty-community {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 1.2rem;
+    border: 1px dashed var(--line);
+    border-radius: 0.75rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.community-wall-heading {
+    margin: 2.5rem 0 1rem;
+}
+
+.community-wall-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
+.community-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 0.85rem;
+}
+
+.wall-card {
+    min-width: 0;
+    padding: 1.1rem;
+    border: 1px solid rgba(57, 239, 255, 0.2);
+    border-radius: 0.8rem;
+    background: linear-gradient(145deg, rgba(22, 28, 44, 0.85), rgba(13, 16, 27, 0.9));
+}
+
+.wall-meta {
+    margin-bottom: 0.7rem;
+    color: var(--cyan);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.wall-answer {
+    margin: 0;
+    color: #e1e6f2;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.admin-panel {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(1.2rem, 3vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: var(--panel);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.admin-warning {
+    margin-bottom: 1.4rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255, 225, 90, 0.3);
+    border-radius: 0.65rem;
+    background: rgba(255, 225, 90, 0.06);
+    color: #e9dfb1;
+    font-size: 0.82rem;
+}
+
+.admin-login-form {
+    display: grid;
+    max-width: 440px;
+    gap: 0.65rem;
+    margin: 1.25rem 0;
+}
+
+.admin-login-form h2,
+.admin-add-section h2,
+.admin-responses-section h2 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.admin-login-form label,
+.admin-field {
+    display: grid;
+    min-width: 0;
+    gap: 0.35rem;
+    color: #e8edf8;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.admin-login-form input,
+.admin-field input,
+.admin-field select,
+.admin-field textarea,
+.admin-add-form select,
+.admin-add-form textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid rgba(167, 187, 220, 0.22);
+    border-radius: 0.5rem;
+    outline: none;
+    background: rgba(6, 9, 16, 0.8);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.84rem;
+}
+
+.admin-login-form input:focus,
+.admin-field input:focus,
+.admin-field select:focus,
+.admin-field textarea:focus,
+.admin-add-form select:focus,
+.admin-add-form textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(57, 239, 255, 0.1);
+}
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.admin-toolbar-actions,
+.admin-response-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.admin-add-section,
+.admin-responses-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+}
+
+.admin-add-form,
+.admin-response-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 0.7rem;
+}
+
+.admin-add-form > label,
+.admin-response-form > .admin-field {
+    display: grid;
+    min-width: 0;
+    gap: 0.35rem;
+    color: #e8edf8;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.admin-add-form > .survey-fieldset,
+.admin-add-form > textarea,
+.admin-add-form > button,
+.admin-response-form > .admin-recommendations,
+.admin-response-form > .admin-answer-field,
+.admin-response-actions {
+    grid-column: 1 / -1;
+}
+
+.admin-response-form > .admin-answer-field textarea,
+.admin-add-form > textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.admin-responses {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-response-card {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: rgba(8, 11, 19, 0.65);
+}
+
+.admin-response-card h3 {
+    margin-bottom: 0.9rem;
+    color: var(--cyan);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.admin-recommendations {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0.65rem 0;
+    padding: 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 0.55rem;
+}
+
+.admin-recommendations legend {
+    padding: 0 0.35rem;
+    color: #e8edf8;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.admin-recommendations label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.73rem;
+}
+
+.admin-recommendations input {
+    flex: 0 0 auto;
+    margin: 0.15rem 0 0;
+    accent-color: var(--cyan);
+}
+
+.admin-delete {
+    border-color: rgba(255, 72, 204, 0.45);
+    color: #ff91dc;
 }
 
 .community-card h2 {
@@ -1239,9 +1616,13 @@ p {
         width: 100%;
         justify-content: flex-start;
         gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        scrollbar-width: thin;
     }
 
     .nav-link {
+        flex: 0 0 auto;
         font-size: 0.7rem;
     }
 
@@ -1292,6 +1673,33 @@ p {
     .template-layout,
     .game-layout {
         grid-template-columns: 1fr;
+    }
+
+    .community-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendation-options {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-add-form,
+    .admin-response-form,
+    .admin-recommendations {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-toolbar-actions {
+        width: 100%;
+    }
+
+    .admin-toolbar-actions .button {
+        width: 100%;
     }
 
     .projection-guide {
