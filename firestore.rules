@@ -10,21 +10,29 @@ service cloud.firestore {
 
     function validResponse(data) {
       return data.keys().hasOnly([
+          'centerName',
           'stage',
           'outcome',
           'recommendations',
           'song',
           'openAnswer',
-          'createdAt'
+          'status',
+          'createdAt',
+          'approvedAt'
         ])
         && data.keys().hasAll([
+          'centerName',
           'stage',
           'outcome',
           'recommendations',
           'song',
           'openAnswer',
+          'status',
           'createdAt'
         ])
+        && data.centerName is string
+        && data.centerName.size() >= 1
+        && data.centerName.size() <= 120
         && data.stage in ['Infantil', 'Primària', 'ESO', 'Altres']
         && data.outcome in ['Molt bé', 'Bé', 'Regular', 'Ens ha costat']
         && data.song in [
@@ -51,13 +59,27 @@ service cloud.firestore {
         && data.recommendations.toSet().size() == data.recommendations.size()
         && data.openAnswer is string
         && data.openAnswer.size() <= 1000
-        && data.createdAt == request.time;
+        && data.status in ['pending', 'approved']
+        && data.createdAt is timestamp
+        && (data.status == 'pending'
+          ? !('approvedAt' in data)
+          : data.approvedAt is timestamp);
     }
 
     match /communityResponses/{responseId} {
-      allow read: if true;
-      allow create: if validResponse(request.resource.data);
-      allow update: if false;
+      allow read: if isAdmin()
+        || ('status' in resource.data && resource.data.status == 'approved');
+      allow create: if validResponse(request.resource.data)
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time
+        && !('approvedAt' in request.resource.data);
+      allow update: if isAdmin()
+        && (!('status' in resource.data) || resource.data.status == 'pending')
+        && request.resource.data.status == 'approved'
+        && request.resource.data.approvedAt == request.time
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'approvedAt', 'centerName'])
+        && validResponse(request.resource.data);
       allow delete: if isAdmin();
     }
 

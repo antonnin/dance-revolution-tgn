@@ -754,6 +754,10 @@ p {
     letter-spacing: 0;
 }
 
+.document-heading h2 {
+    margin: 0;
+}
+
 .document-frame {
     display: block;
     width: 100%;
@@ -1210,11 +1214,38 @@ p {
     background: var(--panel);
 }
 
+.admin-login-dialog {
+    width: min(calc(100% - 2rem), 460px);
+    max-width: none;
+    padding: clamp(1.4rem, 5vw, 2.2rem);
+    border: 1px solid rgba(57, 239, 255, 0.4);
+    border-radius: 1rem;
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+}
+
+.admin-login-dialog::backdrop {
+    background: rgba(5, 7, 14, 0.72);
+    backdrop-filter: blur(9px);
+}
+
 .admin-login-form {
     display: grid;
-    max-width: 440px;
+    width: 100%;
     gap: 0.65rem;
-    margin: 1.25rem 0;
+    margin: 0;
+}
+
+.admin-login-form .eyebrow {
+    margin: 0;
+    color: var(--cyan);
+}
+
+.admin-login-form > p:not(.eyebrow):not(.form-feedback) {
+    margin: 0 0 0.6rem;
+    color: var(--muted);
+    font-size: 0.88rem;
 }
 
 .admin-login-form h2,
@@ -1286,6 +1317,10 @@ p {
     background: rgba(8, 11, 19, 0.65);
 }
 
+.admin-response-card.is-pending {
+    border-color: rgba(255, 225, 90, 0.35);
+}
+
 .admin-response-card h3 {
     margin-bottom: 0.9rem;
     color: var(--cyan);
@@ -1306,6 +1341,17 @@ p {
 .admin-response-answer {
     color: #e1e6f2;
     white-space: pre-wrap;
+}
+
+.admin-response-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.admin-approve {
+    border-color: rgba(57, 239, 255, 0.45);
+    color: var(--cyan);
 }
 
 .admin-delete {

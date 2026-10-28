@@ -29,10 +29,25 @@
                 <button class="nav-link" id="nav-plantilla" type="button" role="tab" aria-selected="false" aria-controls="plantilla" tabindex="-1">Crea la teva versió</button>
                 <button class="nav-link" id="nav-recursos" type="button" role="tab" aria-selected="false" aria-controls="recursos" tabindex="-1">Recursos</button>
                 <button class="nav-link" id="nav-comunitat" type="button" role="tab" aria-selected="false" aria-controls="comunitat" tabindex="-1">Comunitat</button>
-                <button class="nav-link" id="nav-gestio" type="button" role="tab" aria-selected="false" aria-controls="gestio" tabindex="-1">Gestiona el mural</button>
+                <button class="nav-link" id="nav-gestio" type="button" role="tab" aria-selected="false" aria-controls="gestio" tabindex="-1">Espai d'administració</button>
             </nav>
         </div>
     </header>
+
+    <dialog id="admin-login-dialog" class="admin-login-dialog" aria-labelledby="admin-login-title">
+        <form id="admin-login-form" class="admin-login-form">
+            <p class="eyebrow">ESPAI D'ADMINISTRACIÓ</p>
+            <h2 id="admin-login-title">Accés restringit</h2>
+            <p>Identifica't amb el compte administrador per consultar aquest espai.</p>
+            <label for="admin-email">Usuari (correu electrònic)</label>
+            <input id="admin-email" name="email" type="email" autocomplete="username" required autofocus>
+            <label for="admin-password">Contrasenya</label>
+            <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
+            <button class="button button-primary" type="submit">Accedeix</button>
+            <p id="admin-login-status" class="form-feedback" aria-live="polite">L'accés requereix un compte creat a Firebase i autoritzat com a administrador.</p>
+            <button class="button button-outline" type="button" data-open-tab="comunitat">Torna a la comunitat</button>
+        </form>
+    </dialog>
 
     <main id="contingut" class="page-shell">
         <section id="motivacio" class="tab-panel is-active" role="tabpanel" aria-labelledby="nav-motivacio" tabindex="0">
@@ -133,18 +148,16 @@
             <div class="resource-grid">
                 <article class="document-card">
                     <div class="document-heading">
-                        <span class="document-tag">PRIMÀRIA</span>
+                        <h2>Proposta didàctica Primària</h2>
                         <a class="button button-outline resource-open" href="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
                     </div>
-                    <h2>Proposta didàctica</h2>
                     <iframe class="document-frame" src="https://drive.google.com/file/d/111vlqUKwV4FXl9ltqctA3oJ4bU9XGaKT/preview" title="Proposta didàctica Dance Revolution EF per a Primària" loading="lazy" allow="autoplay"></iframe>
                 </article>
                 <article class="document-card">
                     <div class="document-heading">
-                        <span class="document-tag tag-magenta">ESO</span>
+                        <h2>Proposta didàctica ESO</h2>
                         <a class="button button-outline resource-open" href="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/view?usp=sharing" target="_blank" rel="noopener noreferrer">Obrir a Drive <span aria-hidden="true">↗</span></a>
                     </div>
-                    <h2>Proposta didàctica</h2>
                     <iframe class="document-frame" src="https://drive.google.com/file/d/17mDtrIsIaUZ163H5o8rD1X78Vj_Y-4Bd/preview" title="Proposta didàctica Dance Revolution EF per a l'ESO" loading="lazy" allow="autoplay"></iframe>
                 </article>
             </div>
@@ -183,7 +196,7 @@
                 <div class="community-lab-heading">
                     <p class="eyebrow">EXPERIÈNCIES COMPARTIDES</p>
                     <h2 id="community-lab-title">El vostre gimnàs també és un escenari</h2>
-                        <p>Comparteix com ha anat la sessió, les recomanacions i la cançó preferida. Les respostes es publiquen directament al mural i als resultats de la comunitat.</p>
+                        <p>Comparteix com ha anat la sessió, les recomanacions i la cançó preferida. Les respostes apareixeran al mural i als resultats de la comunitat un cop validades.</p>
                 </div>
                 <div class="inspiration-grid">
                     <article class="inspiration-card">
@@ -206,10 +219,12 @@
                     <div class="share-copy">
                             <p class="eyebrow">ENQUESTA DE CENTRE</p>
                         <h3>Comparteix una experiència</h3>
-                            <p>Envia la teva experiència i s'afegirà directament al mural públic i als resultats de la comunitat.</p>
-                            <p class="share-privacy">No incloguis dades personals ni informació que permeti identificar l'alumnat. El nom del centre no es mostrarà públicament.</p>
+                            <p>Envia la teva experiència perquè l'equip la revisi abans de publicar-la al mural i als resultats de la comunitat.</p>
+                            <p class="share-privacy">El nom del centre apareixerà al costat de les propostes obertes. No incloguis dades personals ni informació que permeti identificar l'alumnat.</p>
                     </div>
                     <form id="experience-form" class="experience-form">
+                        <label for="experience-center">Nom del centre educatiu</label>
+                        <input id="experience-center" name="centerName" type="text" maxlength="120" autocomplete="organization" required>
                         <label for="experience-stage">Etapa educativa</label>
                         <select id="experience-stage" name="stage" required>
                                 <option value="Infantil">Infantil</option>
@@ -250,9 +265,9 @@
                             <textarea id="experience-story" name="story" rows="4" maxlength="1000" placeholder="Comparteix una idea per millorar o ampliar l'activitat..."></textarea>
                             <label class="consent-option">
                                 <input name="publishConsent" type="checkbox" required>
-                                <span>Entenc que les respostes s'afegiran al mural públic. No hi inclouré dades personals.</span>
+                                <span>Entenc que la resposta es publicarà al mural i als resultats quan l'equip la validi. El nom del centre es mostrarà amb les propostes obertes. No hi inclouré dades personals de l'alumnat.</span>
                             </label>
-                            <button class="button button-primary" type="submit">Publica la resposta <span aria-hidden="true">→</span></button>
+                            <button class="button button-primary" type="submit">Envia per validar <span aria-hidden="true">→</span></button>
                             <p id="experience-feedback" class="form-feedback" aria-live="polite"></p>
                         </form>
                     </div>
@@ -274,20 +289,11 @@
 
         <section id="gestio" class="tab-panel" role="tabpanel" aria-labelledby="nav-gestio" tabindex="0" hidden>
             <div class="section-heading">
-                <p class="eyebrow">GESTIÓ DEL MURAL</p>
-                <h1 id="admin-title">Gestiona el mural</h1>
-                <p>Consulta les aportacions publicades i elimina les que calgui. Només els comptes autoritzats a Firebase poden gestionar-les.</p>
+                <p class="eyebrow">ESPAI RESTRINGIT</p>
+                <h1 id="admin-title">Espai d'administració</h1>
+                <p>Revisa i valida les aportacions abans de publicar-les, i esborra les que calgui.</p>
             </div>
             <section class="admin-panel" aria-labelledby="admin-title">
-                <form id="admin-login-form" class="admin-login-form" hidden>
-                    <h2>Accés a la gestió</h2>
-                    <label for="admin-email">Correu electrònic</label>
-                    <input id="admin-email" name="email" type="email" autocomplete="username" required>
-                    <label for="admin-password">Contrasenya de Firebase</label>
-                    <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
-                    <button class="button button-primary" type="submit">Accedeix</button>
-                    <p id="admin-login-status" class="form-feedback" aria-live="polite">L'administració requereix un compte creat a Firebase i autoritzat a les regles de la base de dades.</p>
-                </form>
                 <div id="admin-workspace" hidden>
                     <div class="admin-toolbar">
                         <p id="admin-status" class="form-feedback" aria-live="polite"></p>
@@ -295,9 +301,13 @@
                             <button id="admin-lock" class="button button-outline" type="button">Tanca la sessió</button>
                         </div>
                     </div>
-                    <section class="admin-responses-section" aria-labelledby="admin-responses-title">
-                        <h2 id="admin-responses-title">Aportacions publicades</h2>
-                        <div id="admin-responses" class="admin-responses"></div>
+                    <section class="admin-responses-section" aria-labelledby="admin-pending-title">
+                        <h2 id="admin-pending-title">Aportacions pendents de validar</h2>
+                        <div id="admin-pending" class="admin-responses"></div>
+                    </section>
+                    <section class="admin-responses-section" aria-labelledby="admin-approved-title">
+                        <h2 id="admin-approved-title">Aportacions validades</h2>
+                        <div id="admin-approved" class="admin-responses"></div>
                     </section>
                 </div>
             </section>

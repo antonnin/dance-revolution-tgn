@@ -10,11 +10,12 @@ import {
     getDoc,
     onAuthStateChanged,
     onSnapshot,
-    orderBy,
     query,
     serverTimestamp,
     signInWithEmailAndPassword,
     signOut,
+    updateDoc,
+    where,
 } from './firebase-client.js';
 
 const tabButtons = [...document.querySelectorAll('[role="tab"]')];
@@ -41,10 +42,14 @@ const songs = [
 ];
 
 let communityResponses = [];
+let adminResponses = [];
 let adminUser = null;
 let stopCommunityListener = null;
+let stopAdminListener = null;
 
 function openTab(tabId, updateHistory = true) {
+    const loginDialog = document.querySelector('#admin-login-dialog');
+    if (tabId !== 'gestio' && loginDialog.open) loginDialog.close();
     const activeButton = tabButtons.find((button) => button.getAttribute('aria-controls') === tabId);
     const activePanel = document.getElementById(tabId);
 
@@ -71,7 +76,10 @@ function openTab(tabId, updateHistory = true) {
     }
 
     if (tabId === 'comunitat') loadCommunity();
-    if (tabId === 'gestio' && adminUser) loadAdminResponses();
+    if (tabId === 'gestio') {
+        updateAdminVisibility();
+        if (adminUser) loadAdminResponses();
+    }
 }
 
 tabButtons.forEach((button, index) => {
@@ -102,6 +110,10 @@ function validResponse(response) {
     return response
         && typeof response.id === 'string'
         && /^[\w-]{1,60}$/.test(response.id)
+        && (response.centerName === undefined
+            || (typeof response.centerName === 'string'
+                && response.centerName.trim().length > 0
+                && response.centerName.length <= 120))
         && stages.includes(response.stage)
         && outcomes.includes(response.outcome)
         && Array.isArray(response.recommendations)
@@ -112,8 +124,17 @@ function validResponse(response) {
         && songs.includes(response.song)
         && typeof response.openAnswer === 'string'
         && response.openAnswer.length <= 1000
+        && (response.status === undefined || ['pending', 'approved'].includes(response.status))
         && typeof response.createdAt === 'string'
         && !Number.isNaN(Date.parse(response.createdAt));
+}
+
+function responseFromDocument(document) {
+    const data = document.data({ serverTimestamps: 'estimate' });
+    const createdAt = typeof data.createdAt?.toDate === 'function'
+        ? data.createdAt.toDate().toISOString()
+        : '';
+    return { id: document.id, ...data, createdAt };
 }
 
 function ensureFirebaseConfigured() {
@@ -167,7 +188,7 @@ function renderCommunity(responses) {
 
     statsContainer.replaceChildren();
     wall.replaceChildren();
-    status.textContent = `${responses.length} experiències publicades directament per la comunitat.`;
+    status.textContent = `${responses.length} experiències validades i publicades per la comunitat.`;
 
     for (const response of responses) {
         stats.stages[response.stage] = (stats.stages[response.stage] || 0) + 1;
@@ -204,7 +225,7 @@ function renderCommunity(responses) {
         card.className = 'wall-card';
         const metadata = document.createElement('p');
         metadata.className = 'wall-meta';
-        metadata.textContent = `${response.stage} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
+        metadata.textContent = `${response.centerName || 'Centre educatiu no indicat'} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
         const answer = document.createElement('p');
         answer.className = 'wall-answer';
         answer.textContent = response.openAnswer;
@@ -222,26 +243,20 @@ async function loadCommunity() {
         status.textContent = 'Carregant les respostes...';
         const responsesQuery = query(
             collection(db, 'communityResponses'),
-            orderBy('createdAt', 'desc'),
+            where('status', '==', 'approved'),
         );
         stopCommunityListener = onSnapshot(responsesQuery, (snapshot) => {
             try {
-                const responses = snapshot.docs.map((document) => {
-                    const data = document.data({ serverTimestamps: 'estimate' });
-                    const createdAt = typeof data.createdAt?.toDate === 'function'
-                        ? data.createdAt.toDate().toISOString()
-                        : '';
-                    return { id: document.id, ...data, createdAt };
-                });
+                const responses = snapshot.docs.map(responseFromDocument);
                 if (responses.some((response) => !validResponse(response))) {
                     throw new Error('La base de dades conté una aportació amb dades no vàlides.');
                 }
+                responses.sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
                 communityResponses = responses;
                 renderCommunity(communityResponses);
                 if (adminUser) {
                     document.querySelector('#admin-status').textContent =
-                        `${communityResponses.length} aportacions a Firebase.`;
-                    renderAdminResponses();
+                        `${adminResponses.filter((response) => response.status === 'pending' || !response.status).length} pendents de validar · ${adminResponses.filter((response) => response.status === 'approved').length} validades.`;
                 }
             } catch (error) {
                 status.textContent = `No s'han pogut mostrar els resultats: ${error.message}`;
@@ -261,41 +276,71 @@ async function loadCommunity() {
 
 function updateAdminVisibility() {
     const unlocked = Boolean(adminUser);
-    document.querySelector('#admin-login-form').hidden = unlocked;
     document.querySelector('#admin-workspace').hidden = !unlocked;
-    if (!unlocked) document.querySelector('#admin-responses').replaceChildren();
+    if (!unlocked) {
+        adminResponses = [];
+        document.querySelector('#admin-pending').replaceChildren();
+        document.querySelector('#admin-approved').replaceChildren();
+        if (stopAdminListener) {
+            stopAdminListener();
+            stopAdminListener = null;
+        }
+    }
+    const loginDialog = document.querySelector('#admin-login-dialog');
+    const adminTabActive = document.querySelector('#gestio').classList.contains('is-active');
+    if (unlocked && loginDialog.open) loginDialog.close();
+    if (!unlocked && adminTabActive && !loginDialog.open) loginDialog.showModal();
 }
 
 function renderAdminResponses() {
-    const container = document.querySelector('#admin-responses');
-    container.replaceChildren();
-    if (!communityResponses.length) {
-        const empty = document.createElement('p');
-        empty.className = 'empty-community';
-        empty.textContent = 'Encara no hi ha aportacions per gestionar.';
-        container.append(empty);
-        return;
+    const pendingContainer = document.querySelector('#admin-pending');
+    const approvedContainer = document.querySelector('#admin-approved');
+    pendingContainer.replaceChildren();
+    approvedContainer.replaceChildren();
+    const pendingResponses = adminResponses.filter((response) => response.status !== 'approved');
+    const approvedResponses = adminResponses.filter((response) => response.status === 'approved');
+    for (const [container, responses, emptyMessage] of [
+        [pendingContainer, pendingResponses, 'No hi ha aportacions pendents de validar.'],
+        [approvedContainer, approvedResponses, 'Encara no hi ha aportacions validades.'],
+    ]) {
+        if (!responses.length) {
+            const empty = document.createElement('p');
+            empty.className = 'empty-community';
+            empty.textContent = emptyMessage;
+            container.append(empty);
+        }
+        responses.forEach((response) => {
+            const card = document.createElement('article');
+            card.className = `admin-response-card${response.status === 'approved' ? '' : ' is-pending'}`;
+            const heading = document.createElement('h3');
+            heading.textContent = `${response.centerName || 'Centre educatiu no indicat'} · ${response.stage} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
+            const details = document.createElement('p');
+            details.className = 'admin-response-summary';
+            details.textContent = `${response.outcome} · ${response.song} · ${response.recommendations.join(', ')}`;
+            const answer = document.createElement('p');
+            answer.className = 'admin-response-answer';
+            answer.textContent = response.openAnswer || 'Sense resposta oberta.';
+            const actions = document.createElement('div');
+            actions.className = 'admin-response-actions';
+            if (response.status !== 'approved') {
+                const approve = document.createElement('button');
+                approve.className = 'button button-outline admin-approve';
+                approve.type = 'button';
+                approve.textContent = 'Valida i publica';
+                approve.addEventListener('click', () => approveContribution(response, approve));
+                actions.append(approve);
+            } else {
+                const remove = document.createElement('button');
+                remove.className = 'button button-outline admin-delete';
+                remove.type = 'button';
+                remove.textContent = 'Esborra aquesta aportació';
+                remove.addEventListener('click', () => deleteContribution(response.id, remove));
+                actions.append(remove);
+            }
+            card.append(heading, details, answer, actions);
+            container.append(card);
+        });
     }
-
-    communityResponses.forEach((response, index) => {
-        const card = document.createElement('article');
-        card.className = 'admin-response-card';
-        const heading = document.createElement('h3');
-        heading.textContent = `Resposta ${index + 1} · ${response.stage} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
-        const details = document.createElement('p');
-        details.className = 'admin-response-summary';
-        details.textContent = `${response.outcome} · ${response.song} · ${response.recommendations.join(', ')}`;
-        const answer = document.createElement('p');
-        answer.className = 'admin-response-answer';
-        answer.textContent = response.openAnswer || 'Sense resposta oberta.';
-        const remove = document.createElement('button');
-        remove.className = 'button button-outline admin-delete';
-        remove.type = 'button';
-        remove.textContent = 'Esborra aquesta aportació';
-        remove.addEventListener('click', () => deleteContribution(response.id, remove));
-        card.append(heading, details, answer, remove);
-        container.append(card);
-    });
 }
 
 async function loadAdminResponses() {
@@ -303,13 +348,46 @@ async function loadAdminResponses() {
     status.textContent = 'Carregant les aportacions de Firebase...';
     try {
         ensureFirebaseConfigured();
-        loadCommunity();
-        if (communityResponses.length) {
-            status.textContent = `${communityResponses.length} aportacions a Firebase.`;
-            renderAdminResponses();
-        }
+        if (stopAdminListener) return;
+        stopAdminListener = onSnapshot(collection(db, 'communityResponses'), (snapshot) => {
+            try {
+                adminResponses = snapshot.docs.map(responseFromDocument);
+                if (adminResponses.some((response) => !validResponse(response))) {
+                    throw new Error('La base de dades conté una aportació amb dades no vàlides.');
+                }
+                adminResponses.sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
+                const pendingCount = adminResponses.filter((response) => response.status !== 'approved').length;
+                const approvedCount = adminResponses.length - pendingCount;
+                status.textContent = `${pendingCount} pendents de validar · ${approvedCount} validades.`;
+                renderAdminResponses();
+            } catch (error) {
+                status.textContent = `No s'han pogut mostrar les aportacions: ${error.message}`;
+            }
+        }, (error) => {
+            stopAdminListener = null;
+            status.textContent = `No s'han pogut carregar les aportacions: ${error.message}`;
+        });
     } catch (error) {
         status.textContent = `No s'han pogut carregar les aportacions: ${error.message}`;
+    }
+}
+
+async function approveContribution(response, button) {
+    const status = document.querySelector('#admin-status');
+    button.disabled = true;
+    status.textContent = 'Validant l’aportació...';
+    try {
+        ensureFirebaseConfigured();
+        if (!adminUser) throw new Error('Cal iniciar sessió amb un compte administrador.');
+        await updateDoc(doc(db, 'communityResponses', response.id), {
+            status: 'approved',
+            approvedAt: serverTimestamp(),
+            ...(!response.centerName ? { centerName: 'Centre educatiu no indicat' } : {}),
+        });
+        status.textContent = 'Aportació validada i publicada.';
+    } catch (error) {
+        status.textContent = `No s'ha pogut validar l'aportació: ${error.message}`;
+        button.disabled = false;
     }
 }
 
@@ -324,6 +402,7 @@ async function deleteContribution(responseId, button) {
         if (!adminUser) throw new Error('Cal iniciar sessió amb un compte administrador.');
         await deleteDoc(doc(db, 'communityResponses', responseId));
         communityResponses = communityResponses.filter((response) => response.id !== responseId);
+        adminResponses = adminResponses.filter((response) => response.id !== responseId);
         status.textContent = 'Aportació esborrada de Firebase.';
         renderCommunity(communityResponses);
         renderAdminResponses();
@@ -349,13 +428,16 @@ experienceForm?.addEventListener('submit', async (event) => {
         return;
     }
     const response = {
+        centerName: String(formData.get('centerName') || '').trim(),
         stage: String(formData.get('stage')),
         outcome: String(formData.get('outcome')),
         recommendations: selectedRecommendations,
         song: String(formData.get('song')),
         openAnswer: String(formData.get('story') || '').trim(),
     };
-    if (!stages.includes(response.stage)
+    if (!response.centerName
+        || response.centerName.length > 120
+        || !stages.includes(response.stage)
         || !outcomes.includes(response.outcome)
         || !songs.includes(response.song)
         || !response.recommendations.length
@@ -367,17 +449,17 @@ experienceForm?.addEventListener('submit', async (event) => {
 
     const submitButton = experienceForm.querySelector('button[type="submit"]');
     submitButton.disabled = true;
-    feedback.textContent = 'Publicant la resposta...';
+    feedback.textContent = 'Enviant la resposta per validar...';
     try {
         ensureFirebaseConfigured();
         await addDoc(collection(db, 'communityResponses'), {
             ...response,
+            status: 'pending',
             createdAt: serverTimestamp(),
         });
         experienceForm.reset();
         document.querySelector('#experience-stage').value = 'Primària';
-        feedback.textContent = 'Gràcies! La teva resposta ja forma part del mural i dels resultats.';
-        loadCommunity();
+        feedback.textContent = 'Gràcies! L’equip revisarà la teva resposta abans de publicar-la.';
     } catch (error) {
         feedback.textContent = `No s’ha pogut publicar l’experiència: ${error.message}`;
     } finally {
@@ -404,6 +486,10 @@ document.querySelector('#admin-login-form')?.addEventListener('submit', async (e
     } finally {
         button.disabled = false;
     }
+});
+
+document.querySelector('#admin-login-dialog')?.addEventListener('cancel', (event) => {
+    event.preventDefault();
 });
 
 document.querySelector('#admin-lock')?.addEventListener('click', async () => {
