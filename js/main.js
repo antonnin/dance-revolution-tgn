@@ -96,7 +96,10 @@ function openTab(tabId, updateHistory = true) {
 }
 
 tabButtons.forEach((button, index) => {
-    button.addEventListener('click', () => openTab(button.getAttribute('aria-controls')));
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
+        openTab(button.getAttribute('aria-controls'));
+    });
     button.addEventListener('keydown', (event) => {
         let nextIndex;
         if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabButtons.length;
