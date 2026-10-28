@@ -46,10 +46,9 @@ let adminResponses = [];
 let adminUser = null;
 let stopCommunityListener = null;
 let stopAdminListener = null;
+let previousTabId = 'motivacio';
 
 function openTab(tabId, updateHistory = true) {
-    const loginDialog = document.querySelector('#admin-login-dialog');
-    if (tabId !== 'gestio' && loginDialog.open) loginDialog.close();
     const activeButton = tabButtons.find((button) => button.getAttribute('aria-controls') === tabId);
     const activePanel = document.getElementById(tabId);
 
@@ -57,6 +56,14 @@ function openTab(tabId, updateHistory = true) {
         console.error(`No s'ha trobat la pestanya "${tabId}".`);
         return;
     }
+
+    const currentPanel = tabPanels.find((panel) => panel.classList.contains('is-active'));
+    if (tabId === 'gestio' && currentPanel && currentPanel.id !== 'gestio') {
+        previousTabId = currentPanel.id;
+    }
+
+    const loginDialog = document.querySelector('#admin-login-dialog');
+    if (tabId !== 'gestio' && loginDialog.open) loginDialog.close();
 
     tabButtons.forEach((button) => {
         const isActive = button === activeButton;
@@ -104,6 +111,11 @@ document.querySelectorAll('[data-open-tab]').forEach((button) => {
         openTab(tabId);
         document.getElementById(`nav-${tabId}`).focus();
     });
+});
+
+document.querySelector('#admin-return')?.addEventListener('click', () => {
+    openTab(previousTabId);
+    document.getElementById(`nav-${previousTabId}`).focus();
 });
 
 function validResponse(response) {
