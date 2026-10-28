@@ -22,7 +22,7 @@ La web utilitza **Cloud Firestore** i **Firebase Authentication**. No cal crear 
 5. A **Authentication → Settings → Authorized domains**, afegeix el domini on es publica el lloc a GitHub Pages.
 6. A **Authentication → Users**, crea el compte que faràs servir per administrar les aportacions. No cal habilitar el registre d'usuaris des de la web.
 7. Copia l'UID d'aquest compte. A **Firestore Database → Data**, crea la col·lecció `admins` i un document amb l'UID com a identificador i el camp booleà `enabled` amb valor `true`.
-8. A **Firestore Database → Rules**, substitueix les regles per les del fitxer `firestore.rules` i publica-les. Les regles deixen que tothom enviï aportacions pendents, però només mostren les validades. Només un administrador pot llegir les pendents, validar-les o esborrar les validades.
+8. A **Firestore Database → Rules**, substitueix les regles per les del fitxer `firestore.rules` i publica-les. Les regles deixen que tothom enviï aportacions pendents, però només mostren les validades. Només un administrador pot llegir les pendents, validar-les o descartar-les, i esborrar les validades.
 9. Publica el lloc a GitHub Pages. Comprova l'enviament d'una aportació i inicia sessió a **Espai d'administració** amb el correu i la contrasenya del compte administrador de Firebase.
 
 Les aportacions noves queden pendents fins que un administrador les valida. Després de validar-les, apareixen als resultats i al mural públic; el nom del centre només es mostra al costat de les propostes obertes. No hi incloguis dades personals ni informació que permeti identificar l'alumnat. L'administració es protegeix amb Firebase Authentication i les regles de Firestore; una contrasenya escrita al JavaScript públic no seria una protecció segura.

@@ -329,12 +329,18 @@ function renderAdminResponses() {
                 approve.textContent = 'Valida i publica';
                 approve.addEventListener('click', () => approveContribution(response, approve));
                 actions.append(approve);
+                const discard = document.createElement('button');
+                discard.className = 'button button-outline admin-discard';
+                discard.type = 'button';
+                discard.textContent = 'Descarta comentari';
+                discard.addEventListener('click', () => deleteContribution(response, discard, true));
+                actions.append(discard);
             } else {
                 const remove = document.createElement('button');
                 remove.className = 'button button-outline admin-delete';
                 remove.type = 'button';
                 remove.textContent = 'Esborra aquesta aportació';
-                remove.addEventListener('click', () => deleteContribution(response.id, remove));
+                remove.addEventListener('click', () => deleteContribution(response, remove));
                 actions.append(remove);
             }
             card.append(heading, details, answer, actions);
@@ -391,19 +397,24 @@ async function approveContribution(response, button) {
     }
 }
 
-async function deleteContribution(responseId, button) {
-    if (!window.confirm('Vols esborrar definitivament aquesta aportació de Firebase?')) return;
+async function deleteContribution(response, button, isPending = false) {
+    const confirmation = isPending
+        ? 'Vols descartar definitivament aquesta aportació pendent? No es publicarà al mural ni a les estadístiques.'
+        : 'Vols esborrar definitivament aquesta aportació publicada de Firebase?';
+    if (!window.confirm(confirmation)) return;
     const status = document.querySelector('#admin-status');
     button.disabled = true;
-    status.textContent = 'Esborrant l’aportació...';
+    status.textContent = isPending ? 'Descartant l’aportació pendent...' : 'Esborrant l’aportació publicada...';
 
     try {
         ensureFirebaseConfigured();
         if (!adminUser) throw new Error('Cal iniciar sessió amb un compte administrador.');
-        await deleteDoc(doc(db, 'communityResponses', responseId));
-        communityResponses = communityResponses.filter((response) => response.id !== responseId);
-        adminResponses = adminResponses.filter((response) => response.id !== responseId);
-        status.textContent = 'Aportació esborrada de Firebase.';
+        await deleteDoc(doc(db, 'communityResponses', response.id));
+        communityResponses = communityResponses.filter((item) => item.id !== response.id);
+        adminResponses = adminResponses.filter((item) => item.id !== response.id);
+        status.textContent = isPending
+            ? 'Aportació pendent descartada; no s’ha publicat.'
+            : 'Aportació publicada esborrada de Firebase.';
         renderCommunity(communityResponses);
         renderAdminResponses();
     } catch (error) {

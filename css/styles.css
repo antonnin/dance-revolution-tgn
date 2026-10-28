@@ -1354,7 +1354,8 @@ p {
     color: var(--cyan);
 }
 
-.admin-delete {
+.admin-delete,
+.admin-discard {
     border-color: rgba(255, 72, 204, 0.45);
     color: #ff91dc;
 }
