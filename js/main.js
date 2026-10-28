@@ -20,6 +20,12 @@ import {
 
 const tabButtons = [...document.querySelectorAll('[role="tab"]')];
 const tabPanels = [...document.querySelectorAll('.tab-panel')];
+const tabIds = tabPanels.map((panel) => panel.id);
+const pathSegments = window.location.pathname.split('/').filter(Boolean);
+const currentPathSegment = pathSegments[pathSegments.length - 1] || '';
+const pageBasePath = window.location.pathname.endsWith('/')
+    ? window.location.pathname
+    : `${window.location.pathname.slice(0, window.location.pathname.lastIndexOf('/') + 1)}`;
 const stages = ['Infantil', 'Primària', 'ESO', 'Altres'];
 const outcomes = ['Molt bé', 'Bé', 'Regular', 'Ens ha costat'];
 const recommendationOptions = [
@@ -78,8 +84,8 @@ function openTab(tabId, updateHistory = true) {
         panel.hidden = !isActive;
     });
 
-    if (updateHistory && window.location.hash !== `#${tabId}`) {
-        window.history.replaceState(null, '', `#${tabId}`);
+    if (updateHistory && window.location.pathname !== `${pageBasePath}${tabId}`) {
+        window.history.replaceState(null, '', `${pageBasePath}${tabId}`);
     }
 
     if (tabId === 'comunitat') loadCommunity();
@@ -106,7 +112,8 @@ tabButtons.forEach((button, index) => {
 });
 
 document.querySelectorAll('[data-open-tab]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+        event.preventDefault();
         const tabId = button.getAttribute('data-open-tab');
         openTab(tabId);
         document.getElementById(`nav-${tabId}`).focus();
@@ -564,7 +571,12 @@ if (auth) {
             : 'Configura Firebase per habilitar l’accés d’administració.';
 }
 
-const requestedTab = window.location.hash.slice(1);
-const initialTab = tabPanels.some((panel) => panel.id === requestedTab) ? requestedTab : 'motivacio';
+const requestedTab = new URLSearchParams(window.location.search).get('tab');
+const legacyHashTab = window.location.hash.slice(1);
+const routeTab = tabIds.includes(currentPathSegment) ? currentPathSegment : '';
+const initialTab = [requestedTab, routeTab, legacyHashTab].find((tabId) => tabIds.includes(tabId)) || 'motivacio';
 updateAdminVisibility();
 openTab(initialTab, false);
+if (requestedTab || routeTab || legacyHashTab) {
+    window.history.replaceState(null, '', `${pageBasePath}${initialTab}`);
+}

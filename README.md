@@ -43,4 +43,4 @@ python -m http.server 8000
 
 Obre `http://localhost:8000`. La lectura, l'enviament i la gestió requereixen una configuració vàlida a `js/firebase-client.js` i les regles de Firestore publicades.
 
-GitHub Pages publica automàticament la carpeta del repositori amb `.github/workflows/pages.yml`.
+GitHub Pages publica automàticament la carpeta del repositori amb `.github/workflows/pages.yml`. Les pestanyes tenen adreces netes, com ara `/comunitat`, i `404.html` permet recuperar la pestanya correcta en obrir o actualitzar directament aquestes adreces a GitHub Pages.
