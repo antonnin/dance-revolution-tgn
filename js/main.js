@@ -20,6 +20,8 @@ import {
 
 const tabButtons = [...document.querySelectorAll('[role="tab"]')];
 const tabPanels = [...document.querySelectorAll('.tab-panel')];
+const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+const mainNav = document.querySelector('#main-nav');
 const tabIds = tabPanels.map((panel) => panel.id);
 const pathSegments = window.location.pathname.split('/').filter(Boolean);
 const currentPathSegment = pathSegments[pathSegments.length - 1] || '';
@@ -53,6 +55,26 @@ let adminUser = null;
 let stopCommunityListener = null;
 let stopAdminListener = null;
 let previousTabId = 'motivacio';
+
+function setMobileNavOpen(isOpen) {
+    mobileNavToggle.setAttribute('aria-expanded', String(isOpen));
+    mainNav.classList.toggle('is-open', isOpen);
+}
+
+mobileNavToggle.addEventListener('click', () => {
+    setMobileNavOpen(mobileNavToggle.getAttribute('aria-expanded') !== 'true');
+});
+
+document.querySelector('.site-header').addEventListener('keydown', (event) => {
+    if (
+        event.key !== 'Escape'
+        || mobileNavToggle.getAttribute('aria-expanded') !== 'true'
+        || !window.matchMedia('(max-width: 720px)').matches
+    ) return;
+
+    setMobileNavOpen(false);
+    mobileNavToggle.focus();
+});
 
 function openTab(tabId, updateHistory = true) {
     const activeButton = tabButtons.find((button) => button.getAttribute('aria-controls') === tabId);
@@ -99,6 +121,10 @@ tabButtons.forEach((button, index) => {
     button.addEventListener('click', (event) => {
         event.preventDefault();
         openTab(button.getAttribute('aria-controls'));
+        if (window.matchMedia('(max-width: 720px)').matches) {
+            setMobileNavOpen(false);
+            mobileNavToggle.focus();
+        }
     });
     button.addEventListener('keydown', (event) => {
         let nextIndex;
@@ -119,13 +145,21 @@ document.querySelectorAll('[data-open-tab]').forEach((button) => {
         event.preventDefault();
         const tabId = button.getAttribute('data-open-tab');
         openTab(tabId);
-        document.getElementById(`nav-${tabId}`).focus();
+        if (window.matchMedia('(max-width: 720px)').matches) {
+            setMobileNavOpen(false);
+            document.getElementById(tabId).focus();
+        } else {
+            document.getElementById(`nav-${tabId}`).focus();
+        }
     });
 });
 
 document.querySelector('#admin-return')?.addEventListener('click', () => {
     openTab(previousTabId);
-    document.getElementById(`nav-${previousTabId}`).focus();
+    const focusTarget = window.matchMedia('(max-width: 720px)').matches
+        ? document.getElementById(previousTabId)
+        : document.getElementById(`nav-${previousTabId}`);
+    focusTarget.focus();
 });
 
 function validResponse(response) {
