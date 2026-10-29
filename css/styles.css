@@ -20,6 +20,7 @@
 
 html {
     min-width: 320px;
+    font-size: 112.5%;
     scroll-behavior: smooth;
 }
 
@@ -114,21 +115,25 @@ a:focus-visible {
 
 .brand-title {
     font-family: var(--font-display);
-    font-size: 0.77rem;
+    font-size: 0.9rem;
     font-weight: 800;
     letter-spacing: 0.08em;
 }
 
 .brand-subtitle {
     color: var(--muted);
-    font-size: 0.61rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.12em;
 }
 
 .main-nav {
     display: flex;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
     gap: clamp(0.35rem, 1.25vw, 1.3rem);
 }
 
@@ -140,7 +145,7 @@ a:focus-visible {
     color: #b7bfd1;
     cursor: pointer;
     font-family: var(--font-display);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.075em;
     text-transform: uppercase;
@@ -229,7 +234,7 @@ a:focus-visible {
     margin: 0 0 0.85rem;
     color: var(--cyan);
     font-family: var(--font-display);
-    font-size: 0.65rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.19em;
     line-height: 1.6;
@@ -289,7 +294,7 @@ p {
     max-width: 650px;
     margin-bottom: 2rem;
     color: #c1c9d8;
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-size: clamp(1.125rem, 1.8vw, 1.25rem);
 }
 
 .hero h1,
@@ -330,7 +335,7 @@ p {
     border: 1px solid transparent;
     border-radius: 0.55rem;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
     transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
@@ -507,7 +512,7 @@ p {
 .original-resource h2 {
     margin-bottom: 0.7rem;
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.45;
@@ -519,7 +524,7 @@ p {
 .original-resource p {
     margin-bottom: 0;
     color: var(--muted);
-    font-size: 0.92rem;
+    font-size: 1.05rem;
 }
 
 .cta-strip {
@@ -542,7 +547,7 @@ p {
 .cta-strip h2 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: 0;
 }
@@ -587,7 +592,7 @@ p {
 .projection-guide h2 {
     margin-bottom: 1.15rem;
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     font-weight: 600;
     letter-spacing: 0;
     line-height: 1.35;
@@ -616,21 +621,21 @@ p {
     border: 1px solid rgba(57, 239, 255, 0.45);
     border-radius: 50%;
     color: var(--cyan);
-    font-size: 0.76rem;
+    font-size: 0.9rem;
     font-weight: 800;
 }
 
 .projection-steps strong {
     display: block;
     margin-bottom: 0.15rem;
-    font-size: 0.82rem;
+    font-size: 1rem;
 }
 
 .projection-steps p,
 .projection-tip {
     margin: 0;
     color: var(--muted);
-    font-size: 0.74rem;
+    font-size: 0.95rem;
     line-height: 1.55;
 }
 
@@ -647,7 +652,7 @@ p {
     left: 1rem;
     color: #d3d9e7;
     font-family: var(--font-display);
-    font-size: 0.62rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.12em;
 }
@@ -711,7 +716,7 @@ p {
 .resource-open {
     min-height: 38px;
     padding: 0.45rem 0.7rem;
-    font-size: 0.73rem;
+    font-size: 0.95rem;
 }
 
 .document-card {
@@ -732,14 +737,14 @@ p {
 .document-tag {
     color: var(--cyan);
     font-family: var(--font-display);
-    font-size: 0.65rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.12em;
 }
 
 .text-link {
     color: var(--cyan);
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
 }
@@ -750,7 +755,7 @@ p {
 
 .document-card h2 {
     margin: 0.7rem 0 1rem;
-    font-size: 0.97rem;
+    font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0;
 }
@@ -772,7 +777,7 @@ p {
 .embed-note {
     margin: 0.75rem 0 0;
     color: var(--muted);
-    font-size: 0.75rem;
+    font-size: 0.95rem;
 }
 
 .original-resource {
@@ -805,11 +810,11 @@ p {
 
 .original-resource h2 {
     margin-bottom: 0.25rem;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
 }
 
 .original-resource p {
-    font-size: 0.83rem;
+    font-size: 1rem;
 }
 
 .original-resource .button {
@@ -897,7 +902,7 @@ p {
     margin-bottom: 1.3rem;
     color: var(--cyan);
     font-family: var(--font-display);
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 700;
     letter-spacing: 0.13em;
 }
@@ -916,7 +921,7 @@ p {
 .share-copy > p:not(.eyebrow) {
     margin-bottom: 0;
     color: var(--muted);
-    font-size: 0.87rem;
+    font-size: 1.05rem;
 }
 
 .share-experience {
@@ -941,7 +946,7 @@ p {
 .share-copy .share-privacy {
     margin-top: 1rem;
     color: #abb5c9;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
 }
 
 .experience-form {
@@ -952,7 +957,7 @@ p {
 .experience-form label {
     margin-top: 0.35rem;
     color: #e8edf8;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
@@ -963,7 +968,7 @@ p {
     gap: 0.6rem;
     margin-top: 0.75rem;
     color: #c1c9d8;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.5;
 }
@@ -988,7 +993,7 @@ p {
 .survey-fieldset legend {
     margin-bottom: 0.55rem;
     color: #e8edf8;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
@@ -1015,7 +1020,7 @@ p {
     border-radius: 0.6rem;
     background: rgba(7, 10, 18, 0.62);
     color: #c1c9d8;
-    font-size: 0.76rem;
+    font-size: 0.95rem;
     font-weight: 500;
     line-height: 1.45;
 }
@@ -1037,7 +1042,7 @@ p {
     background: rgba(6, 9, 16, 0.8);
     color: var(--text);
     font: inherit;
-    font-size: 0.87rem;
+    font-size: 1rem;
     transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -1068,7 +1073,7 @@ p {
     min-height: 1.5rem;
     margin: 0;
     color: #c1c9d8;
-    font-size: 0.82rem;
+    font-size: 1rem;
 }
 
 .form-feedback a {
@@ -1127,7 +1132,7 @@ p {
     justify-content: space-between;
     gap: 0.75rem;
     color: #c1c9d8;
-    font-size: 0.77rem;
+    font-size: 0.95rem;
 }
 
 .stat-label strong {
@@ -1157,7 +1162,7 @@ p {
     border: 1px dashed var(--line);
     border-radius: 0.75rem;
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: 1.05rem;
 }
 
 .community-wall-heading {
@@ -1167,7 +1172,7 @@ p {
 .community-wall-heading p {
     margin: 0;
     color: var(--muted);
-    font-size: 0.84rem;
+    font-size: 1rem;
 }
 
 .community-wall {
@@ -1188,7 +1193,7 @@ p {
     margin-bottom: 0.7rem;
     color: var(--cyan);
     font-family: var(--font-display);
-    font-size: 0.72rem;
+    font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1197,7 +1202,7 @@ p {
 .wall-answer {
     margin: 0;
     color: #e1e6f2;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
 }
@@ -1246,7 +1251,7 @@ p {
 .admin-login-form > p:not(.eyebrow):not(.form-feedback) {
     margin: 0 0 0.6rem;
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: 1.05rem;
 }
 
 .admin-login-form h2,
@@ -1263,7 +1268,7 @@ p {
     min-width: 0;
     gap: 0.35rem;
     color: #e8edf8;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     font-weight: 600;
 }
 
@@ -1277,7 +1282,7 @@ p {
     background: rgba(6, 9, 16, 0.8);
     color: var(--text);
     font: inherit;
-    font-size: 0.84rem;
+    font-size: 1rem;
 }
 
 .admin-login-form input:focus {
@@ -1335,7 +1340,7 @@ p {
 .admin-response-answer {
     margin-bottom: 0.75rem;
     color: var(--muted);
-    font-size: 0.82rem;
+    font-size: 1rem;
     overflow-wrap: anywhere;
 }
 
@@ -1409,7 +1414,7 @@ p {
 
 .contact-links a {
     color: #d9deeb;
-    font-size: 0.84rem;
+    font-size: 1rem;
     text-decoration: none;
 }
 
@@ -1450,7 +1455,7 @@ p {
 .legal-note p {
     margin: 0;
     color: #9da6ba;
-    font-size: 0.76rem;
+    font-size: 0.95rem;
     line-height: 1.7;
 }
 
@@ -1478,7 +1483,7 @@ p {
 .mentor-tagline {
     color: var(--yellow);
     font-family: var(--font-display);
-    font-size: 0.58rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.17em;
     text-align: center;
@@ -1494,7 +1499,7 @@ p {
 
 .mentor-tagline {
     color: var(--cyan);
-    font-size: 0.5rem;
+    font-size: 0.9rem;
     letter-spacing: 0.1em;
 }
 
@@ -1532,6 +1537,7 @@ p {
     .main-nav {
         flex: 1 1 100%;
         max-width: 100%;
+        flex-wrap: nowrap;
         justify-content: center;
         overflow-x: auto;
         scrollbar-width: none;
@@ -1585,7 +1591,7 @@ p {
 
     .nav-link {
         flex: 0 0 auto;
-        font-size: 0.7rem;
+        font-size: 0.9rem;
     }
 
     .page-shell {
