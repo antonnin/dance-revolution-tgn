@@ -854,8 +854,11 @@ p {
 .original-resource .button {
     flex: 0 0 auto;
     margin-left: auto;
+    min-height: 38px;
+    padding: 0.45rem 0.7rem;
     border-color: rgba(255, 225, 90, 0.48);
     color: var(--yellow);
+    font-size: 0.95rem;
 }
 
 .original-resource .button:hover {
