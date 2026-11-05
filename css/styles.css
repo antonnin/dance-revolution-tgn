@@ -866,6 +866,10 @@ p {
     color: var(--ink);
 }
 
+.vicenc-resources {
+    padding-top: 1rem;
+}
+
 .community-card {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
