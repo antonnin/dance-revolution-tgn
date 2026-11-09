@@ -788,6 +788,7 @@ p {
     margin: 0;
 }
 
+.situation-grid,
 .evaluation-grid {
     grid-template-columns: minmax(0, 1fr);
 }
