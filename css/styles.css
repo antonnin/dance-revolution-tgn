@@ -727,6 +727,72 @@ p {
     gap: 1.25rem;
 }
 
+.resource-sections {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1.75rem;
+}
+
+.resource-section {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: rgba(17, 21, 34, 0.72);
+}
+
+.resource-section summary {
+    display: flex;
+    min-height: 4rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    list-style: none;
+}
+
+.resource-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.resource-section summary::after {
+    color: var(--cyan);
+    content: "+";
+    font-family: var(--font-body);
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.resource-section[open] > summary {
+    border-bottom: 1px solid var(--line);
+}
+
+.resource-section[open] > summary::after {
+    content: "−";
+}
+
+.resource-section summary:focus-visible {
+    outline: 2px solid var(--yellow);
+    outline-offset: -4px;
+}
+
+.resource-section-content {
+    padding: 1.25rem;
+}
+
+.resource-section-content > .resource-grid {
+    margin: 0;
+}
+
+.resource-section-empty {
+    margin: 0;
+    color: var(--muted);
+}
+
 .resource-open {
     min-height: 38px;
     padding: 0.45rem 0.7rem;
@@ -925,10 +991,6 @@ p {
 .original-resource .button:hover {
     background: var(--yellow);
     color: var(--ink);
-}
-
-.vicenc-resources {
-    padding-top: 1rem;
 }
 
 .community-card {
