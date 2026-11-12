@@ -357,6 +357,20 @@ p {
     text-shadow: 0 0 24px rgba(57, 239, 255, 0.28);
 }
 
+.section-heading h1 .spanish-opening-mark {
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: normal;
+    letter-spacing: inherit;
+    text-shadow: none;
+}
+
+html:not([lang="es"]) .spanish-opening-mark {
+    display: none;
+}
+
 .hero h1 span {
     white-space: nowrap;
 }
