@@ -259,6 +259,7 @@ const originalDescription = description?.content;
 const originalTextNodes = new Map();
 const originalAttributes = [];
 const originalResourceUrls = [];
+let languageAnimationFrame = 0;
 
 const resourceIds = new Map([
     ['11hgKY1tQRyz6J5V6fhq_XG93EQe4WHxyQi1sV6dMYAg', '141KPqtD2CJiAG51LcRpCDxAsY1mRiu7LXiHnbZ7D1gk'],
@@ -327,7 +328,19 @@ function translatedResourceUrl(source, targetLanguage, attribute) {
     return value;
 }
 
-function applyLanguage(nextLanguage) {
+function animateLanguageChange() {
+    const pageShell = document.querySelector('.page-shell');
+    if (!pageShell || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    pageShell.classList.remove('language-change');
+    window.cancelAnimationFrame(languageAnimationFrame);
+    languageAnimationFrame = window.requestAnimationFrame(() => {
+        pageShell.classList.add('language-change');
+        languageAnimationFrame = 0;
+    });
+}
+
+function applyLanguage(nextLanguage, animate = true) {
     if (nextLanguage === language) return;
     const previousLanguage = language;
     language = nextLanguage;
@@ -375,6 +388,7 @@ function applyLanguage(nextLanguage) {
     window.dispatchEvent(new CustomEvent('site-language-change', {
         detail: { previousLanguage, language },
     }));
+    if (animate) animateLanguageChange();
 }
 
 const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -407,7 +421,7 @@ window.siteI18n = {
     translateFrom,
 };
 
-applyLanguage(requestedLanguage);
+applyLanguage(requestedLanguage, false);
 
 document.querySelectorAll('.language-option').forEach((button) => {
     button.addEventListener('click', () => applyLanguage(button.dataset.language));

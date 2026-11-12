@@ -246,6 +246,10 @@ a:focus-visible {
     padding: clamp(3rem, 7vw, 6.5rem) 0;
 }
 
+.page-shell.language-change {
+    animation: language-change 180ms ease-out;
+}
+
 .tab-panel[hidden] {
     display: none;
 }
@@ -2112,6 +2116,15 @@ p {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes language-change {
+    from {
+        opacity: 0.9;
+    }
+    to {
+        opacity: 1;
     }
 }
 

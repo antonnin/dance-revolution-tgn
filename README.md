@@ -10,7 +10,7 @@ El web també permet que els centres comparteixin com ha anat l'activitat. Les a
 - **Joc complet:** incorpora el joc de Scratch (cançons i nivells) i una guia per projectar-lo al gimnàs i preparar la Makey Makey.
 - **Plantilla personalitzable:** permet obrir a Scratch una plantilla per crear coreografies i consultar una guia per modificar sons, BPM i seqüències.
 - **Recursos didàctics:** inclou infografies per a primària i secundària, propostes vinculades als currículums de primària i ESO, una infografia de sis sessions i un enllaç a la proposta original de Vicenç Rodríguez Jiménez-Bravo.
-- **Versió en castellà:** el selector de l'extrem superior permet canviar entre català (per defecte) i castellà sense recarregar la pàgina. Es conserven la secció activa i l'estat dels formularis, i la selecció queda reflectida a l'adreça amb `?lang=es`; també es mostren els materials disponibles en castellà.
+- **Versió en castellà:** el selector de l'extrem superior permet canviar entre català (per defecte) i castellà sense recarregar la pàgina, amb un breu efecte d'opacitat. Es conserven la secció activa i l'estat dels formularis, i la selecció queda reflectida a l'adreça amb `?lang=es`; també es mostren els materials disponibles en castellà.
 - **Comunitat:** ofereix un formulari perquè els centres indiquin l'etapa, valorin la sessió, triïn recomanacions i una cançó i, opcionalment, comparteixin una idea oberta.
 - **Resultats i mural:** mostra les respostes validades en estadístiques per etapa, valoració, recomanacions i cançons. Les propostes obertes apareixen al mural amb el nom del centre i la data.
 - **Moderació:** l'espai d'administració permet revisar aportacions pendents, validar-les, descartar-les, esborrar-ne de publicades i tancar la sessió.
