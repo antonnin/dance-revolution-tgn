@@ -247,7 +247,7 @@ a:focus-visible {
 }
 
 .page-shell.language-change {
-    animation: language-change 180ms ease-out;
+    animation: language-change 320ms ease-out;
 }
 
 .tab-panel[hidden] {
@@ -305,6 +305,10 @@ a:focus-visible {
     font-weight: 700;
     letter-spacing: 0.19em;
     line-height: 1.6;
+}
+
+html[lang="es"] .eyebrow {
+    text-transform: uppercase;
 }
 
 .status-dot {
