@@ -18,6 +18,9 @@ import {
     where,
 } from './firebase-client.js';
 
+const t = (value) => window.siteI18n?.translate(value) || value;
+const dateLocale = window.siteI18n?.locale || 'ca';
+const errorMessage = (error) => t(error.message);
 const tabButtons = [...document.querySelectorAll('[role="tab"]')];
 const tabPanels = [...document.querySelectorAll('.tab-panel')];
 const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
@@ -107,7 +110,8 @@ function openTab(tabId, updateHistory = true) {
     });
 
     if (updateHistory && window.location.pathname !== `${pageBasePath}${tabId}`) {
-        window.history.replaceState(null, '', `${pageBasePath}${tabId}`);
+        const languageQuery = window.siteI18n?.language === 'es' ? '?lang=es' : '';
+        window.history.replaceState(null, '', `${pageBasePath}${tabId}${languageQuery}`);
     }
 
     if (tabId === 'comunitat') loadCommunity();
@@ -206,7 +210,7 @@ function appendCountGroup(parent, title, counts, total) {
     const section = document.createElement('section');
     section.className = 'stat-group';
     const heading = document.createElement('h3');
-    heading.textContent = title;
+    heading.textContent = t(title);
     section.append(heading);
 
     const list = document.createElement('ul');
@@ -218,7 +222,7 @@ function appendCountGroup(parent, title, counts, total) {
         const row = document.createElement('div');
         row.className = 'stat-label';
         const name = document.createElement('span');
-        name.textContent = label;
+        name.textContent = t(label);
         const value = document.createElement('strong');
         value.textContent = String(count);
         row.append(name, value);
@@ -236,6 +240,16 @@ function appendCountGroup(parent, title, counts, total) {
     parent.append(section);
 }
 
+function contributionCountText(pending, approved) {
+    const pendingText = pending === 1
+        ? t('1 aportació pendent de validar')
+        : t('{count} aportacions pendents de validar').replace('{count}', String(pending));
+    const approvedText = approved === 1
+        ? t('1 aportació validada')
+        : t('{count} aportacions validades').replace('{count}', String(approved));
+    return `${pendingText} · ${approvedText}.`;
+}
+
 function renderCommunity(responses) {
     const statsContainer = document.querySelector('#community-stats');
     const wall = document.querySelector('#community-wall');
@@ -244,7 +258,10 @@ function renderCommunity(responses) {
 
     statsContainer.replaceChildren();
     wall.replaceChildren();
-    status.textContent = `${responses.length} experiències validades i publicades per la comunitat.`;
+    status.textContent = responses.length === 1
+        ? t('1 experiència validada i publicada per la comunitat.')
+        : t('{count} experiències validades i publicades per la comunitat.')
+            .replace('{count}', String(responses.length));
 
     for (const response of responses) {
         stats.stages[response.stage] = (stats.stages[response.stage] || 0) + 1;
@@ -263,7 +280,7 @@ function renderCommunity(responses) {
     } else {
         const empty = document.createElement('p');
         empty.className = 'empty-community';
-        empty.textContent = 'Encara no hi ha respostes. Sigues el primer centre a compartir la seva experiència.';
+        empty.textContent = t('Encara no hi ha respostes. Sigues el primer centre a compartir la seva experiència.');
         statsContainer.append(empty);
     }
 
@@ -271,7 +288,7 @@ function renderCommunity(responses) {
     if (!openResponses.length) {
         const empty = document.createElement('p');
         empty.className = 'empty-community';
-        empty.textContent = 'Les propostes obertes apareixeran aquí quan les comparteixin els centres.';
+        empty.textContent = t('Les propostes obertes apareixeran aquí quan les comparteixin els centres.');
         wall.append(empty);
         return;
     }
@@ -281,7 +298,7 @@ function renderCommunity(responses) {
         card.className = 'wall-card';
         const metadata = document.createElement('p');
         metadata.className = 'wall-meta';
-        metadata.textContent = `${response.centerName || 'Centre educatiu no indicat'} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
+        metadata.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${new Intl.DateTimeFormat(dateLocale).format(new Date(response.createdAt))}`;
         const answer = document.createElement('p');
         answer.className = 'wall-answer';
         answer.textContent = response.openAnswer;
@@ -296,7 +313,7 @@ async function loadCommunity() {
         ensureFirebaseConfigured();
         if (stopCommunityListener) return;
 
-        status.textContent = 'Carregant les respostes...';
+        status.textContent = t('Carregant les respostes...');
         const responsesQuery = query(
             collection(db, 'communityResponses'),
             where('status', '==', 'approved'),
@@ -311,22 +328,24 @@ async function loadCommunity() {
                 communityResponses = responses;
                 renderCommunity(communityResponses);
                 if (adminUser) {
-                    document.querySelector('#admin-status').textContent =
-                        `${adminResponses.filter((response) => response.status === 'pending' || !response.status).length} pendents de validar · ${adminResponses.filter((response) => response.status === 'approved').length} validades.`;
+                    document.querySelector('#admin-status').textContent = contributionCountText(
+                        adminResponses.filter((response) => response.status === 'pending' || !response.status).length,
+                        adminResponses.filter((response) => response.status === 'approved').length,
+                    );
                 }
             } catch (error) {
-                status.textContent = `No s'han pogut mostrar els resultats: ${error.message}`;
+                status.textContent = t("No s'han pogut mostrar els resultats: {error}").replace('{error}', errorMessage(error));
             }
         }, (error) => {
             stopCommunityListener = null;
-            status.textContent = `No s'han pogut carregar els resultats de Firebase: ${error.message}`;
+            status.textContent = t("No s'han pogut carregar els resultats de Firebase: {error}").replace('{error}', errorMessage(error));
             if (adminUser) {
                 document.querySelector('#admin-status').textContent =
-                    `No s'han pogut carregar les aportacions: ${error.message}`;
+                    t("No s'han pogut carregar les aportacions: {error}").replace('{error}', errorMessage(error));
             }
         });
     } catch (error) {
-        status.textContent = `No s'han pogut carregar els resultats: ${error.message}`;
+        status.textContent = t("No s'han pogut carregar els resultats: {error}").replace('{error}', errorMessage(error));
     }
 }
 
@@ -362,40 +381,40 @@ function renderAdminResponses() {
         if (!responses.length) {
             const empty = document.createElement('p');
             empty.className = 'empty-community';
-            empty.textContent = emptyMessage;
+            empty.textContent = t(emptyMessage);
             container.append(empty);
         }
         responses.forEach((response) => {
             const card = document.createElement('article');
             card.className = `admin-response-card${response.status === 'approved' ? '' : ' is-pending'}`;
             const heading = document.createElement('h3');
-            heading.textContent = `${response.centerName || 'Centre educatiu no indicat'} · ${response.stage} · ${new Intl.DateTimeFormat('ca').format(new Date(response.createdAt))}`;
+            heading.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${t(response.stage)} · ${new Intl.DateTimeFormat(dateLocale).format(new Date(response.createdAt))}`;
             const details = document.createElement('p');
             details.className = 'admin-response-summary';
-            details.textContent = `${response.outcome} · ${response.song} · ${response.recommendations.join(', ')}`;
+            details.textContent = `${t(response.outcome)} · ${response.song} · ${response.recommendations.map(t).join(', ')}`;
             const answer = document.createElement('p');
             answer.className = 'admin-response-answer';
-            answer.textContent = response.openAnswer || 'Sense resposta oberta.';
+            answer.textContent = response.openAnswer || t('Sense resposta oberta.');
             const actions = document.createElement('div');
             actions.className = 'admin-response-actions';
             if (response.status !== 'approved') {
                 const approve = document.createElement('button');
                 approve.className = 'button button-outline admin-approve';
                 approve.type = 'button';
-                approve.textContent = 'Valida i publica';
+                approve.textContent = t('Valida i publica');
                 approve.addEventListener('click', () => approveContribution(response, approve));
                 actions.append(approve);
                 const discard = document.createElement('button');
                 discard.className = 'button button-outline admin-discard';
                 discard.type = 'button';
-                discard.textContent = 'Descarta comentari';
+                discard.textContent = t('Descarta comentari');
                 discard.addEventListener('click', () => deleteContribution(response, discard, true));
                 actions.append(discard);
             } else {
                 const remove = document.createElement('button');
                 remove.className = 'button button-outline admin-delete';
                 remove.type = 'button';
-                remove.textContent = 'Esborra aquesta aportació';
+                remove.textContent = t('Esborra aquesta aportació');
                 remove.addEventListener('click', () => deleteContribution(response, remove));
                 actions.append(remove);
             }
@@ -407,7 +426,7 @@ function renderAdminResponses() {
 
 async function loadAdminResponses() {
     const status = document.querySelector('#admin-status');
-    status.textContent = 'Carregant les aportacions de Firebase...';
+    status.textContent = t('Carregant les aportacions de Firebase...');
     try {
         ensureFirebaseConfigured();
         if (stopAdminListener) return;
@@ -420,24 +439,24 @@ async function loadAdminResponses() {
                 adminResponses.sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
                 const pendingCount = adminResponses.filter((response) => response.status !== 'approved').length;
                 const approvedCount = adminResponses.length - pendingCount;
-                status.textContent = `${pendingCount} pendents de validar · ${approvedCount} validades.`;
+                status.textContent = contributionCountText(pendingCount, approvedCount);
                 renderAdminResponses();
             } catch (error) {
-                status.textContent = `No s'han pogut mostrar les aportacions: ${error.message}`;
+                status.textContent = t("No s'han pogut mostrar les aportacions: {error}").replace('{error}', errorMessage(error));
             }
         }, (error) => {
             stopAdminListener = null;
-            status.textContent = `No s'han pogut carregar les aportacions: ${error.message}`;
+            status.textContent = t("No s'han pogut carregar les aportacions: {error}").replace('{error}', errorMessage(error));
         });
     } catch (error) {
-        status.textContent = `No s'han pogut carregar les aportacions: ${error.message}`;
+        status.textContent = t("No s'han pogut carregar les aportacions: {error}").replace('{error}', errorMessage(error));
     }
 }
 
 async function approveContribution(response, button) {
     const status = document.querySelector('#admin-status');
     button.disabled = true;
-    status.textContent = 'Validant l’aportació...';
+    status.textContent = t('Validant l’aportació...');
     try {
         ensureFirebaseConfigured();
         if (!adminUser) throw new Error('Cal iniciar sessió amb un compte administrador.');
@@ -446,21 +465,21 @@ async function approveContribution(response, button) {
             approvedAt: serverTimestamp(),
             ...(!response.centerName ? { centerName: 'Centre educatiu no indicat' } : {}),
         });
-        status.textContent = 'Aportació validada i publicada.';
+        status.textContent = t('Aportació validada i publicada.');
     } catch (error) {
-        status.textContent = `No s'ha pogut validar l'aportació: ${error.message}`;
+        status.textContent = t("No s'ha pogut validar l'aportació: {error}").replace('{error}', errorMessage(error));
         button.disabled = false;
     }
 }
 
 async function deleteContribution(response, button, isPending = false) {
     const confirmation = isPending
-        ? 'Vols descartar definitivament aquesta aportació pendent? No es publicarà al mural ni a les estadístiques.'
-        : 'Vols esborrar definitivament aquesta aportació publicada de Firebase?';
+        ? t('Vols descartar definitivament aquesta aportació pendent? No es publicarà al mural ni a les estadístiques.')
+        : t('Vols esborrar definitivament aquesta aportació publicada de Firebase?');
     if (!window.confirm(confirmation)) return;
     const status = document.querySelector('#admin-status');
     button.disabled = true;
-    status.textContent = isPending ? 'Descartant l’aportació pendent...' : 'Esborrant l’aportació publicada...';
+    status.textContent = isPending ? t('Descartant l’aportació pendent...') : t('Esborrant l’aportació publicada...');
 
     try {
         ensureFirebaseConfigured();
@@ -469,12 +488,12 @@ async function deleteContribution(response, button, isPending = false) {
         communityResponses = communityResponses.filter((item) => item.id !== response.id);
         adminResponses = adminResponses.filter((item) => item.id !== response.id);
         status.textContent = isPending
-            ? 'Aportació pendent descartada; no s’ha publicat.'
-            : 'Aportació publicada esborrada de Firebase.';
+            ? t('Aportació pendent descartada; no s’ha publicat.')
+            : t('Aportació publicada esborrada de Firebase.');
         renderCommunity(communityResponses);
         renderAdminResponses();
     } catch (error) {
-        status.textContent = `No s'ha pogut esborrar l'aportació: ${error.message}`;
+        status.textContent = t("No s'ha pogut esborrar l'aportació: {error}").replace('{error}', errorMessage(error));
         button.disabled = false;
     }
 }
@@ -491,7 +510,7 @@ experienceForm?.addEventListener('submit', async (event) => {
     const formData = new FormData(experienceForm);
     const selectedRecommendations = formData.getAll('recommendations').map(String);
     if (!selectedRecommendations.length) {
-        feedback.textContent = 'Tria almenys una recomanació abans de publicar l’experiència.';
+        feedback.textContent = t('Tria almenys una recomanació abans de publicar l’experiència.');
         return;
     }
     const response = {
@@ -510,13 +529,13 @@ experienceForm?.addEventListener('submit', async (event) => {
         || !response.recommendations.length
         || response.recommendations.some((item) => !recommendationOptions.includes(item))
         || response.openAnswer.length > 1000) {
-        feedback.textContent = 'Les respostes no són vàlides. Revisa el formulari i torna-ho a provar.';
+        feedback.textContent = t('Les respostes no són vàlides. Revisa el formulari i torna-ho a provar.');
         return;
     }
 
     const submitButton = experienceForm.querySelector('button[type="submit"]');
     submitButton.disabled = true;
-    feedback.textContent = 'Enviant la resposta per validar...';
+    feedback.textContent = t('Enviant la resposta per validar...');
     try {
         ensureFirebaseConfigured();
         await addDoc(collection(db, 'communityResponses'), {
@@ -526,9 +545,9 @@ experienceForm?.addEventListener('submit', async (event) => {
         });
         experienceForm.reset();
         document.querySelector('#experience-stage').value = 'Primària';
-        feedback.textContent = 'Gràcies! L’equip revisarà la teva resposta abans de publicar-la.';
+        feedback.textContent = t('Gràcies! L’equip revisarà la teva resposta abans de publicar-la.');
     } catch (error) {
-        feedback.textContent = `No s’ha pogut publicar l’experiència: ${error.message}`;
+        feedback.textContent = t('No s’ha pogut publicar l’experiència: {error}').replace('{error}', errorMessage(error));
     } finally {
         submitButton.disabled = false;
     }
@@ -541,7 +560,7 @@ document.querySelector('#admin-login-form')?.addEventListener('submit', async (e
     const email = String(formData.get('email') || '').trim();
     const password = String(formData.get('password') || '');
     const status = document.querySelector('#admin-login-status');
-    status.textContent = 'Iniciant sessió a Firebase...';
+    status.textContent = t('Iniciant sessió a Firebase...');
     form.reset();
     const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
@@ -549,7 +568,7 @@ document.querySelector('#admin-login-form')?.addEventListener('submit', async (e
         ensureFirebaseConfigured();
         await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-        status.textContent = `No s’ha pogut iniciar la sessió: ${error.message}`;
+        status.textContent = t('No s’ha pogut iniciar la sessió: {error}').replace('{error}', errorMessage(error));
     } finally {
         button.disabled = false;
     }
@@ -562,10 +581,10 @@ document.querySelector('#admin-login-dialog')?.addEventListener('cancel', (event
 document.querySelector('#admin-lock')?.addEventListener('click', async () => {
     try {
         await signOut(auth);
-        document.querySelector('#admin-login-status').textContent = 'Sessió tancada.';
+        document.querySelector('#admin-login-status').textContent = t('Sessió tancada.');
     } catch (error) {
         document.querySelector('#admin-status').textContent =
-            `No s'ha pogut tancar la sessió: ${error.message}`;
+            t("No s'ha pogut tancar la sessió: {error}").replace('{error}', errorMessage(error));
     }
 });
 
@@ -578,14 +597,14 @@ if (auth) {
         }
 
         const status = document.querySelector('#admin-login-status');
-        status.textContent = 'Comprovant els permisos d’administració...';
+        status.textContent = t('Comprovant els permisos d’administració...');
         try {
             const adminDocument = await getDoc(doc(db, 'admins', user.uid));
             if (!adminDocument.exists() || adminDocument.data().enabled !== true) {
                 adminUser = null;
                 updateAdminVisibility();
                 await signOut(auth);
-                status.textContent = 'Aquest compte no té permisos per gestionar les aportacions.';
+                status.textContent = t('Aquest compte no té permisos per gestionar les aportacions.');
                 return;
             }
 
@@ -595,17 +614,17 @@ if (auth) {
         } catch (error) {
             adminUser = null;
             updateAdminVisibility();
-            status.textContent = `No s'han pogut comprovar els permisos: ${error.message}`;
+            status.textContent = t("No s'han pogut comprovar els permisos: {error}").replace('{error}', errorMessage(error));
         }
     }, (error) => {
         document.querySelector('#admin-login-status').textContent =
-            `No s'ha pogut comprovar la sessió de Firebase: ${error.message}`;
+            t("No s'ha pogut comprovar la sessió de Firebase: {error}").replace('{error}', errorMessage(error));
     });
 } else {
-    document.querySelector('#admin-login-status').textContent =
-        firebaseConfigured
-            ? `No s'ha pogut inicialitzar Firebase: ${firebaseInitializationError || 'revisa la configuració web del projecte.'}`
-            : 'Configura Firebase per habilitar l’accés d’administració.';
+    document.querySelector('#admin-login-status').textContent = firebaseConfigured
+        ? t("No s'ha pogut inicialitzar Firebase: {error}")
+            .replace('{error}', errorMessage(new Error(firebaseInitializationError || 'revisa la configuració web del projecte.')))
+        : t('Configura Firebase per habilitar l’accés d’administració.');
 }
 
 const requestedTab = new URLSearchParams(window.location.search).get('tab');
@@ -615,5 +634,6 @@ const initialTab = [requestedTab, routeTab, legacyHashTab].find((tabId) => tabId
 updateAdminVisibility();
 openTab(initialTab, false);
 if (requestedTab || routeTab || legacyHashTab) {
-    window.history.replaceState(null, '', `${pageBasePath}${initialTab}`);
+    const languageQuery = window.siteI18n?.language === 'es' ? '?lang=es' : '';
+    window.history.replaceState(null, '', `${pageBasePath}${initialTab}${languageQuery}`);
 }

@@ -88,8 +88,16 @@ a:focus-visible {
     min-height: 86px;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 1rem;
     margin-inline: auto;
+}
+
+.header-tools {
+    display: flex;
+    min-width: 0;
+    flex: 0 1 auto;
+    align-items: center;
+    gap: 1.15rem;
 }
 
 .brand {
@@ -98,6 +106,51 @@ a:focus-visible {
     align-items: center;
     gap: 0.85rem;
     text-decoration: none;
+}
+
+.language-switch {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(17, 21, 34, 0.8);
+}
+
+.language-option {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.55rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.language-option[aria-pressed="true"] {
+    background: rgba(57, 239, 255, 0.12);
+    color: var(--text);
+}
+
+.catalan-flag {
+    display: block;
+    width: 1.35rem;
+    height: 0.9rem;
+    border-radius: 0.12rem;
+    overflow: hidden;
+}
+
+.spanish-flag {
+    font-size: 1.05rem;
+    line-height: 1;
 }
 
 .brand-logo {
@@ -1690,6 +1743,38 @@ p {
     border-radius: 0.4rem;
 }
 
+@media (max-width: 1250px) {
+    .header-inner {
+        width: min(100% - 2rem, 1440px);
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.2rem 1.5rem;
+        padding: 0.8rem 0 0.35rem;
+    }
+
+    .header-tools {
+        margin-right: auto;
+    }
+
+    .main-nav {
+        flex: 1 1 100%;
+        max-width: 100%;
+        flex-wrap: nowrap;
+        justify-content: center;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .main-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-link {
+        padding-block: 0.65rem;
+        font-size: 1rem;
+    }
+}
+
 @media (max-width: 1050px) {
     .header-inner {
         width: min(100% - 2rem, 1440px);
@@ -1697,6 +1782,10 @@ p {
         justify-content: center;
         gap: 0.2rem 1.5rem;
         padding: 0.8rem 0 0.35rem;
+    }
+
+    .header-tools {
+        margin-right: auto;
     }
 
     .brand {
@@ -1744,10 +1833,32 @@ p {
         width: min(100% - 1.5rem, 1240px);
     }
 
-    .brand {
+    .header-tools {
         width: 100%;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+    }
+
+    .brand {
+        min-width: 0;
         margin: 0;
+        gap: 0.5rem;
+    }
+
+    .brand-logo {
+        width: 3.2rem;
+        height: 3.2rem;
+    }
+
+    .brand-subtitle {
+        font-size: 0.67rem;
+        letter-spacing: 0.06em;
+    }
+
+    .language-option {
+        min-height: 34px;
+        padding-inline: 0.4rem;
+        font-size: 0.72rem;
     }
 
     .mobile-nav-toggle {

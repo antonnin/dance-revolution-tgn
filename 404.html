@@ -13,14 +13,24 @@
         const pathSegments = window.location.pathname.split('/').filter(Boolean);
         const requestedTab = pathSegments.pop();
         const basePath = `/${pathSegments.length ? `${pathSegments.join('/')}/` : ''}`;
+        const language = new URLSearchParams(window.location.search).get('lang');
+        const languageQuery = language === 'es' ? '&lang=es' : '';
 
         if (tabIds.includes(requestedTab)) {
-            window.location.replace(`${basePath}?tab=${encodeURIComponent(requestedTab)}`);
+            window.location.replace(`${basePath}?tab=${encodeURIComponent(requestedTab)}${languageQuery}`);
         } else {
-            document.querySelector('#message').textContent = 'No s’ha trobat aquesta pàgina.';
+            document.documentElement.lang = language === 'es' ? 'es' : 'ca';
+            document.title = language === 'es'
+                ? 'Página no encontrada | Dance Revolution EF'
+                : document.title;
+            document.querySelector('#message').textContent = language === 'es'
+                ? 'No se ha encontrado esta página.'
+                : 'No s’ha trobat aquesta pàgina.';
             const homeLink = document.createElement('a');
-            homeLink.href = basePath;
-            homeLink.textContent = 'Torna a Dance Revolution EF';
+            homeLink.href = `${basePath}${language === 'es' ? '?lang=es' : ''}`;
+            homeLink.textContent = language === 'es'
+                ? 'Volver a Dance Revolution EF'
+                : 'Torna a Dance Revolution EF';
             document.querySelector('#message').append(' ', homeLink);
         }
     </script>
