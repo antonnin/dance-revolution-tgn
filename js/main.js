@@ -19,7 +19,7 @@ import {
 } from './firebase-client.js';
 
 const t = (value) => window.siteI18n?.translate(value) || value;
-const dateLocale = window.siteI18n?.locale || 'ca';
+const dateLocale = () => window.siteI18n?.locale || 'ca';
 const errorMessage = (error) => t(error.message);
 const tabButtons = [...document.querySelectorAll('[role="tab"]')];
 const tabPanels = [...document.querySelectorAll('.tab-panel')];
@@ -54,6 +54,8 @@ const songs = [
 
 let communityResponses = [];
 let adminResponses = [];
+let communityReady = false;
+let adminResponsesReady = false;
 let adminUser = null;
 let stopCommunityListener = null;
 let stopAdminListener = null;
@@ -298,7 +300,7 @@ function renderCommunity(responses) {
         card.className = 'wall-card';
         const metadata = document.createElement('p');
         metadata.className = 'wall-meta';
-        metadata.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${new Intl.DateTimeFormat(dateLocale).format(new Date(response.createdAt))}`;
+        metadata.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${new Intl.DateTimeFormat(dateLocale()).format(new Date(response.createdAt))}`;
         const answer = document.createElement('p');
         answer.className = 'wall-answer';
         answer.textContent = response.openAnswer;
@@ -326,6 +328,7 @@ async function loadCommunity() {
                 }
                 responses.sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
                 communityResponses = responses;
+                communityReady = true;
                 renderCommunity(communityResponses);
                 if (adminUser) {
                     document.querySelector('#admin-status').textContent = contributionCountText(
@@ -388,7 +391,7 @@ function renderAdminResponses() {
             const card = document.createElement('article');
             card.className = `admin-response-card${response.status === 'approved' ? '' : ' is-pending'}`;
             const heading = document.createElement('h3');
-            heading.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${t(response.stage)} · ${new Intl.DateTimeFormat(dateLocale).format(new Date(response.createdAt))}`;
+            heading.textContent = `${response.centerName || t('Centre educatiu no indicat')} · ${t(response.stage)} · ${new Intl.DateTimeFormat(dateLocale()).format(new Date(response.createdAt))}`;
             const details = document.createElement('p');
             details.className = 'admin-response-summary';
             details.textContent = `${t(response.outcome)} · ${response.song} · ${response.recommendations.map(t).join(', ')}`;
@@ -424,6 +427,23 @@ function renderAdminResponses() {
     }
 }
 
+window.addEventListener('site-language-change', ({ detail }) => {
+    for (const selector of [
+        '#experience-feedback',
+        '#community-results-status',
+        '#admin-status',
+        '#admin-login-status',
+    ]) {
+        const element = document.querySelector(selector);
+        if (element?.textContent) {
+            element.textContent = window.siteI18n.translateFrom(element.textContent, detail.previousLanguage);
+        }
+    }
+
+    if (communityReady) renderCommunity(communityResponses);
+    if (adminResponsesReady) renderAdminResponses();
+});
+
 async function loadAdminResponses() {
     const status = document.querySelector('#admin-status');
     status.textContent = t('Carregant les aportacions de Firebase...');
@@ -437,6 +457,7 @@ async function loadAdminResponses() {
                     throw new Error('La base de dades conté una aportació amb dades no vàlides.');
                 }
                 adminResponses.sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
+                adminResponsesReady = true;
                 const pendingCount = adminResponses.filter((response) => response.status !== 'approved').length;
                 const approvedCount = adminResponses.length - pendingCount;
                 status.textContent = contributionCountText(pendingCount, approvedCount);

@@ -251,84 +251,164 @@ const translations = {
     'i': 'y',
 };
 
-const language = new URLSearchParams(window.location.search).get('lang') === 'es' ? 'es' : 'ca';
-const spanish = language === 'es';
+const requestedLanguage = new URLSearchParams(window.location.search).get('lang') === 'es' ? 'es' : 'ca';
+let language = 'ca';
+const originalTitle = document.title;
+const description = document.querySelector('meta[name="description"]');
+const originalDescription = description?.content;
+const originalTextNodes = new Map();
+const originalAttributes = [];
+const originalResourceUrls = [];
+
+const resourceIds = new Map([
+    ['11hgKY1tQRyz6J5V6fhq_XG93EQe4WHxyQi1sV6dMYAg', '141KPqtD2CJiAG51LcRpCDxAsY1mRiu7LXiHnbZ7D1gk'],
+    ['16c-0U0J2rMqAEuEGpWuE0KBo5RTXulKBmqM79Eujhiw', '1gjbFcU05u9UXiXObGykKcJGM1VieWaEjI6ftqv1pNuc'],
+    ['1zGRVlHtRuOwRjgthGDRYqwotZUkhGpzleBIU_JpqjHg', '1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE'],
+    ['1djh9-yx2b5AowbA8vhMZAsjek7bCRQvu', '1toE8aAjZb2XIQ2zaDJY1IoE6SUGSc2dk'],
+    ['1puZkvG2ePWrF-ArIpZQqOcrKQW2FylF8', '1zt9eC0cqo0YCp8hRgHVbcrMFWyMRsE_d'],
+    ['192AZReDsNniZE7mzhXo5-MhTilzPT8yt', '17UI4tj89YAgp8n4v8qL-HvWlH37gf0Ts'],
+    ['1ClML4D9f1u_LokxrGxrNJMd9evZaUC1K', '1cxKyfAAWs5zBu5wp7qvToiD4Xkm6v8px'],
+    ['1ClfO55uTEbAZINcAu5uAVF0DKWvZdL7S', '1JR78zxb6ESbYVfuPiTknRsED7DEDycxO'],
+    ['1duislE7FtbYsJX295khOiXKOmlr4ZLo-', '1EPdEj4ruW7BCH0gcKJpCS7fL9AhXGS6x'],
+    ['1ZfD_o2xYR9l3yCQF_sTHia_B25j-pdNc', '1fiLE6o1FNXcHOEwkcd3CEhODNBa1aaXn'],
+]);
+
+const reverseTranslations = new Map(
+    Object.entries(translations).map(([catalan, spanish]) => [spanish, catalan]),
+);
 
 function translate(value) {
-    if (!spanish) return value;
-    return translations[value] || value.replace(/^(\d{2}-\d{2} )Blau Beat Revolution$/, '$1Azul Beat Revolution');
-}
-
-document.documentElement.lang = language;
-document.title = spanish
-    ? 'Dance Revolution EF | Mentoría 4.0 Tarragonès'
-    : document.title;
-const description = document.querySelector('meta[name="description"]');
-if (spanish && description) {
-    description.content = 'Dance Revolution EF: una propuesta de juego, movimiento y tecnología para proyectar la Educación Física en pantalla grande.';
-}
-
-if (spanish) {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-    let node = walker.nextNode();
-    while (node) {
-        const key = node.nodeValue.trim();
-        const translated = translate(key);
-        if (translated !== key) {
-            const start = node.nodeValue.match(/^\s*/)[0];
-            const end = node.nodeValue.match(/\s*$/)[0];
-            node.nodeValue = `${start}${translated}${end}`;
-        }
-        node = walker.nextNode();
+    if (language === 'es') {
+        return translations[value] || value.replace(/^(\d{2}-\d{2} )Blau Beat Revolution$/, '$1Azul Beat Revolution');
     }
+    return value;
+}
 
-    for (const element of document.body.querySelectorAll('*')) {
-        for (const attribute of ['aria-label', 'title', 'placeholder', 'alt']) {
-            const value = element.getAttribute(attribute);
-            if (value && translations[value]) {
-                element.setAttribute(attribute, translations[value]);
-            }
+function translateFrom(value, sourceLanguage) {
+    if (sourceLanguage === language) return value;
+    if (language === 'es') return translate(value);
+
+    const directTranslation = reverseTranslations.get(value);
+    if (directTranslation) return directTranslation;
+
+    for (const [catalan, spanish] of Object.entries(translations)) {
+        if (!spanish.includes('{')) continue;
+        const pattern = new RegExp(`^${spanish.split(/(\{[^}]+\})/g).map((part) => (
+            /^\{[^}]+\}$/.test(part)
+                ? '(.*?)'
+                : part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        )).join('')}$`);
+        const match = value.match(pattern);
+        if (match) {
+            let index = 1;
+            return catalan.replace(/\{[^}]+\}/g, () => match[index++]);
         }
     }
 
-    const resourceIds = new Map([
-        ['11hgKY1tQRyz6J5V6fhq_XG93EQe4WHxyQi1sV6dMYAg', '141KPqtD2CJiAG51LcRpCDxAsY1mRiu7LXiHnbZ7D1gk'],
-        ['16c-0U0J2rMqAEuEGpWuE0KBo5RTXulKBmqM79Eujhiw', '1gjbFcU05u9UXiXObGykKcJGM1VieWaEjI6ftqv1pNuc'],
-        ['1zGRVlHtRuOwRjgthGDRYqwotZUkhGpzleBIU_JpqjHg', '1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE'],
-        ['1djh9-yx2b5AowbA8vhMZAsjek7bCRQvu', '1toE8aAjZb2XIQ2zaDJY1IoE6SUGSc2dk'],
-        ['1puZkvG2ePWrF-ArIpZQqOcrKQW2FylF8', '1zt9eC0cqo0YCp8hRgHVbcrMFWyMRsE_d'],
-        ['192AZReDsNniZE7mzhXo5-MhTilzPT8yt', '17UI4tj89YAgp8n4v8qL-HvWlH37gf0Ts'],
-        ['1ClML4D9f1u_LokxrGxrNJMd9evZaUC1K', '1cxKyfAAWs5zBu5wp7qvToiD4Xkm6v8px'],
-        ['1ClfO55uTEbAZINcAu5uAVF0DKWvZdL7S', '1JR78zxb6ESbYVfuPiTknRsED7DEDycxO'],
-        ['1duislE7FtbYsJX295khOiXKOmlr4ZLo-', '1EPdEj4ruW7BCH0gcKJpCS7fL9AhXGS6x'],
-        ['1ZfD_o2xYR9l3yCQF_sTHia_B25j-pdNc', '1fiLE6o1FNXcHOEwkcd3CEhODNBa1aaXn'],
-    ]);
-
-    for (const element of document.querySelectorAll('a[href], iframe[src]')) {
-        const attribute = element.hasAttribute('href') ? 'href' : 'src';
-        let value = element.getAttribute(attribute);
-        for (const [catalanId, spanishId] of resourceIds) {
-            value = value.replace(catalanId, spanishId);
-        }
-        if (attribute === 'href' && value.includes('1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE')) {
-            value = `https://docs.google.com/spreadsheets/d/1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE/edit?usp=sharing`;
-        }
-        element.setAttribute(attribute, value);
-    }
+    return value;
 }
 
-document.querySelectorAll('.language-option').forEach((button) => {
-    const selected = button.dataset.language === language;
-    button.setAttribute('aria-pressed', String(selected));
-    button.addEventListener('click', () => {
-        const url = new URL(window.location.href);
-        url.searchParams.set('lang', button.dataset.language);
-        window.location.assign(url);
+function preserveWhitespace(source, translated) {
+    const start = source.match(/^\s*/)[0];
+    const end = source.match(/\s*$/)[0];
+    return `${start}${translated}${end}`;
+}
+
+function translatedResourceUrl(source, targetLanguage, attribute) {
+    if (targetLanguage !== 'es') return source;
+
+    let value = source;
+    for (const [catalanId, spanishId] of resourceIds) {
+        value = value.replace(catalanId, spanishId);
+    }
+    if (attribute === 'href' && value.includes('1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE')) {
+        return 'https://docs.google.com/spreadsheets/d/1Wl3r2ECH1npXDiYiA-UFLEEO2HAcN5tKw6CKS7eY5TE/edit?usp=sharing';
+    }
+    return value;
+}
+
+function applyLanguage(nextLanguage) {
+    if (nextLanguage === language) return;
+    const previousLanguage = language;
+    language = nextLanguage;
+
+    const url = new URL(window.location.href);
+    if (language === 'es') url.searchParams.set('lang', 'es');
+    else url.searchParams.delete('lang');
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+
+    document.documentElement.lang = language;
+    document.title = language === 'es'
+        ? 'Dance Revolution EF | Mentoría 4.0 Tarragonès'
+        : originalTitle;
+    if (description && originalDescription) {
+        description.content = language === 'es'
+            ? 'Dance Revolution EF: una propuesta de juego, movimiento y tecnología para proyectar la Educación Física en pantalla grande.'
+            : originalDescription;
+    }
+
+    for (const [node, source] of originalTextNodes) {
+        const key = source.trim();
+        if (!key) continue;
+        const translated = language === 'es' ? translate(key) : key;
+        node.nodeValue = translated === key ? source : preserveWhitespace(source, translated);
+    }
+
+    for (const { element, attribute, source } of originalAttributes) {
+        const translated = language === 'es' ? translations[source] || source : source;
+        if (element.getAttribute(attribute) !== translated) {
+            element.setAttribute(attribute, translated);
+        }
+    }
+
+    for (const { element, attribute, source } of originalResourceUrls) {
+        const translated = translatedResourceUrl(source, language, attribute);
+        if (element.getAttribute(attribute) !== translated) {
+            element.setAttribute(attribute, translated);
+        }
+    }
+
+    document.querySelectorAll('.language-option').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.language === language));
     });
-});
+
+    window.dispatchEvent(new CustomEvent('site-language-change', {
+        detail: { previousLanguage, language },
+    }));
+}
+
+const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+let node = walker.nextNode();
+while (node) {
+    originalTextNodes.set(node, node.nodeValue);
+    node = walker.nextNode();
+}
+
+for (const element of document.body.querySelectorAll('*')) {
+    for (const attribute of ['aria-label', 'title', 'placeholder', 'alt']) {
+        const source = element.getAttribute(attribute);
+        if (source) originalAttributes.push({ element, attribute, source });
+    }
+}
+
+for (const element of document.querySelectorAll('a[href], iframe[src]')) {
+    const attribute = element.hasAttribute('href') ? 'href' : 'src';
+    originalResourceUrls.push({ element, attribute, source: element.getAttribute(attribute) });
+}
 
 window.siteI18n = {
-    language,
-    locale: spanish ? 'es-ES' : 'ca',
+    get language() {
+        return language;
+    },
+    get locale() {
+        return language === 'es' ? 'es-ES' : 'ca';
+    },
     translate,
+    translateFrom,
 };
+
+applyLanguage(requestedLanguage);
+
+document.querySelectorAll('.language-option').forEach((button) => {
+    button.addEventListener('click', () => applyLanguage(button.dataset.language));
+});
